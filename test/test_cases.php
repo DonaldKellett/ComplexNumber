@@ -192,6 +192,49 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_equals(ComplexNumber::Im($z_star_star), 55);
     $test->assert_equals(ComplexNumber::Re($z_star_star), 73);
   });
+  $test->it("should have a working ComplexNumber::add() method that can add both ordinary numbers and complex numbers to the given complex number", function () use ($test) {
+    $z = new ComplexNumber(7.5, -2.3);
+    $z1 = $z->add(34.11);
+    $z2 = $z->add(-5.579);
+    $z3 = $z->add(new ComplexNumber(-8.8, 2.1));
+    $z4 = $z->add(new ComplexNumber(-5, -4));
+    // Immutability test on z
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), -2.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 7.5);
+    // Test different sums of complex numbers
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z1), -2.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z1), 41.61);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z2), -2.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z2), 1.921);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z3), -0.2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z3), -1.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z4), -6.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z4), 2.5);
+  });
+  $test->it("ComplexNumber::add() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->add("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->add("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->add(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->add(array(3, 5));
+    });
+  });
+  $test->it("should have an instance method ComplexNumber::plus() which is an alias of ComplexNumber::add()", function () use ($test) {
+    $z = new ComplexNumber(7.5, -2.3);
+    $w = $z->plus(new ComplexNumber(-8.5, 4.3));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w), 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w), -1);
+  });
 });
 
 ?>

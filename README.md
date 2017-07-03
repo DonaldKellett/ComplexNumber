@@ -151,6 +151,8 @@ $z = new ComplexNumber(sqrt(2), M_PI / 4, ComplexNumber::MODULUS_ARGUMENT_FORM);
 $z->getArgument(); // => PI / 4 (approx.)
 ```
 
+*NOTE: When the complex number is zero, its argument is considered to be* `0` *in agreement with Wolfram Alpha.*
+
 #### arg(z)
 
 ```php
@@ -164,6 +166,8 @@ $z = new ComplexNumber(3, M_PI / 2, ComplexNumber::MODULUS_ARGUMENT_FORM); // 3e
 ComplexNumber::arg($z); // => PI / 2 (approx.)
 ```
 
+*NOTE: When the complex number is zero, its argument is considered to be* `0` *in agreement with Wolfram Alpha.*
+
 #### getComplexConjugate
 
 ```php
@@ -176,3 +180,28 @@ An instance method that receives no arguments and returns its complex conjugate 
 $z = new ComplexNumber(1, 1); // 1 + i
 $z->getComplexConjugate(); // 1 - i
 ```
+
+### Primitive Operations
+
+#### add
+
+```php
+ComplexNumber ComplexNumber::add(mixed $z)
+```
+
+An instance method which receives exactly 1 argument, `$z` (an integer / float / complex number) and adds it to the current complex number.  Returns a new instance; the original instance is unchanged.  E.g.
+
+```php
+$z = new ComplexNumber(1, 2); // 1 + 2i
+$z->add(3); // => 4 + 2i
+$z->add(-3 / 2); // => -0.5 + 2i
+$z->add(new ComplexNumber(3, -7)); // => 4 - 5i
+```
+
+#### plus
+
+```php
+ComplexNumber ComplexNumber::plus(mixed $z)
+```
+
+An alias of `ComplexNumber::add()`

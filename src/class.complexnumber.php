@@ -80,6 +80,17 @@ class ComplexNumber {
     // Returns the complex conjugate "z* = x - iy" of a complex number "z"
     return new ComplexNumber($this->x, -$this->y);
   }
+  public function add($z) {
+    // Type Checking - confirm that "z" is either of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("The argument \"z\" to ComplexNumber::add() must be either of: an integer, a float, a complex number");
+    // Add "z" to the current complex number and return a new instance of ComplexNumber
+    if (is_a($z, "ComplexNumber")) return new ComplexNumber($this->x + $z->x, $this->y + $z->y);
+    return new ComplexNumber($this->x + $z, $this->y);
+  }
+  public function plus($z) {
+    // Alias of ComplexNumber::add()
+    return $this->add($z);
+  }
 }
 
 ?>
