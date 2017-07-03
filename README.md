@@ -15,10 +15,10 @@ Filename | Description
 `LICENSE` | The MIT License
 `README.md` | Documentation
 `src/` | Source code for the `ComplexNumber` class
-    `class.complexnumber.php` | File containing the `ComplexNumber` class
+`src/class.complexnumber.php` | File containing the `ComplexNumber` class
 `test/` | Directory containing the test cases for this project using [PHPTester](https://github.com/DonaldKellett/PHPTester) as the TDD framework
-    `test_cases.php` | The entire test suite for this project
-    `PHPTester-3.1.0/*` | The PHPTester testing framework (version 3.1.0)
+`test/test_cases.php` | The entire test suite for this project
+`test/PHPTester-3.1.0/*` | The PHPTester testing framework (version 3.1.0)
 
 ## PHP Version
 
