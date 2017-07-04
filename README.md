@@ -316,3 +316,17 @@ A **static class method** that accepts exactly 1 argument `$z` (an integer, a fl
 $z = new ComplexNumber(2, 3); // 2 + 3i
 ComplexNumber::exp($z); // => e^(2 + 3i) = e^2 * e^(3i) = e^2 * (cos(3) + isin(3))
 ```
+
+#### log
+
+```php
+ComplexNumber ComplexNumber::log(mixed $z[, mixed $base = M_E])
+```
+
+A **static class method** that accepts one to two arguments, the first being `$z` (an integer, float or complex number), the exponent of the operation, and the second being `$base` (an integer, float or complex number), the base of the operation.  Returns a new instance of `ComplexNumber` which is the result of <em>log<sub>(base)</sub>z</em>.  If the base is not provided, it is assumed to be `e = 2.718281828459045 ... `.  E.g.
+
+```php
+$z = new ComplexNumber(24, 7); // 24 + 7i
+$b = new ComplexNumber(-3, -4); // -3 - 4i
+ComplexNumber::log($z, $b); // => Logarithm of (24 + 7i) to base (-3 - 4i)
+```

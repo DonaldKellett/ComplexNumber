@@ -477,6 +477,67 @@ $test->describe("The ComplexNumber class", function () use ($test) {
       ComplexNumber::exp(array(3, 5));
     });
   });
+  $test->it("should have a working static class method ComplexNumber::log()", function () use ($test) {
+    // Base "e" - Real number tests
+    $ln_1p75 = ComplexNumber::log(1.75); // Positive float
+    $log_minus_3 = ComplexNumber::log(-3); // Negative integer
+    $test->assert_fuzzy_equals(ComplexNumber::Im($ln_1p75), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($ln_1p75), log(1.75));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($log_minus_3), M_PI);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($log_minus_3), log(3));
+    // Base "e" - Complex number tests
+    $z = ComplexNumber::log(new ComplexNumber(24, 7));
+    $w = ComplexNumber::log(new ComplexNumber(-8 / 3, -2));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 0.283794109208328);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 3.218875824868201);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w), -2.498091544796509);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w), 1.203972804325936);
+    // Real base - mixed tests
+    $three = ComplexNumber::log(8, 2); // log2(8) = 3 + 0i
+    $weird = ComplexNumber::log(new ComplexNumber(0, 1), 4); // log4(i)
+    $test->assert_fuzzy_equals(ComplexNumber::Im($three), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($three), 3);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($weird), 1.133090035456798);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($weird), 0);
+    // Complex base - complex test
+    $ultimate = ComplexNumber::log(new ComplexNumber(24, 7), new ComplexNumber(5, -2)); // Logarithm, base 5 - 2i, exponent 24 + 7i
+    $test->assert_fuzzy_equals(ComplexNumber::Im($ultimate), 0.571450787977668);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($ultimate), 1.782697634765799);
+  });
+  $test->it("ComplexNumber::log() should not accept zero values", function () use ($test) {
+    $test->expect_error("An exponent of zero should throw an ArithmeticError", function () {
+      ComplexNumber::log(0);
+    });
+    $test->expect_error("An exponent of zero should throw an ArithmeticError (2)", function () {
+      ComplexNumber::log(0.0);
+    });
+    $test->expect_error("An exponent of zero should throw an ArithmeticError (3)", function () {
+      ComplexNumber::log(new ComplexNumber(0));
+    });
+    $test->expect_error("A base of zero should throw an ArithmeticError", function () {
+      ComplexNumber::log(new ComplexNumber(3, 4), 0);
+    });
+    $test->expect_error("A base of zero should throw an ArithmeticError (2)", function () {
+      ComplexNumber::log(new ComplexNumber(3, 4), 0.0);
+    });
+    $test->expect_error("A base of zero should throw an ArithmeticError (3)", function () {
+      ComplexNumber::log(new ComplexNumber(3, 4), new ComplexNumber(0.0));
+    });
+  });
+  $test->it("ComplexNumber::log() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::log("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::log("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::log(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::log(array(3, 5));
+    });
+  });
 });
 
 ?>

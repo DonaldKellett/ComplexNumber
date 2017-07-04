@@ -152,6 +152,26 @@ class ComplexNumber {
     // Apply a suitable formula and return the result
     return new ComplexNumber(exp($z->x) * cos($z->y), exp($z->x) * sin($z->y));
   }
+  public static function log($z, $base = M_E) {
+    // Type check "z" and "base" to confirm that both are one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::log(), the first argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    if (!is_int($base) && !is_float($base) && !is_a($base, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::log(), the second argument \"base\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not already an instance of ComplexNumber, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // If the given base is e = 2.718281828459045 ... then directly evaluate the complex logarithm of z
+    if ($base === M_E) {
+      // Further input validation - "z" cannot be zero!
+      if ($z->x == 0 && $z->y == 0) throw new ArithmeticError("In ComplexNumber::log(), the first argument \"z\" passed in must be nonzero!");
+      // Apply suitable formula and return the result
+      return new ComplexNumber(log($z->getModulus()), ComplexNumber::arg($z));
+    }
+    // If the given base is not "e" but another real number then convert it into an instance of ComplexNumber
+    if (!is_a($base, "ComplexNumber")) $base = new ComplexNumber($base);
+    // Ensure base is nonzero
+    if ($base->x == 0 && $base->y == 0) throw new ArithmeticError("In ComplexNumber::log(), the second argument \"base\" passed in must be nonzero!");
+    // Use a suitable logarithmic identity and return the result
+    return ComplexNumber::log($z)->dividedBy(ComplexNumber::log($base));
+  }
 }
 
 ?>
