@@ -144,6 +144,14 @@ class ComplexNumber {
     // Apply a suitable formula and return the result
     return new ComplexNumber(sqrt($z->getModulus()), ComplexNumber::arg($z) / 2, ComplexNumber::MODULUS_ARGUMENT_FORM);
   }
+  public static function exp($z) {
+    // Type check "z" to confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::exp(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Apply a suitable formula and return the result
+    return new ComplexNumber(exp($z->x) * cos($z->y), exp($z->x) * sin($z->y));
+  }
 }
 
 ?>

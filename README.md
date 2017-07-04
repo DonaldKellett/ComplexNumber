@@ -301,3 +301,18 @@ ComplexNumber::sqrt(-1); // => 0 + i
 $z = new ComplexNumber(-7, 24); // -7 + 24i
 ComplexNumber::sqrt($z); // => 3 + 4i
 ```
+
+### Exponential/Logarithmic Functions
+
+#### exp
+
+```php
+ComplexNumber ComplexNumber::exp(mixed $z)
+```
+
+A **static class method** that accepts exactly 1 argument `$z` (an integer, a float or a complex number) and computes the result of <em>e<sup>z</sup></em>.  Returns the result as a new instance of `ComplexNumber`.  E.g.
+
+```php
+$z = new ComplexNumber(2, 3); // 2 + 3i
+ComplexNumber::exp($z); // => e^(2 + 3i) = e^2 * e^(3i) = e^2 * (cos(3) + isin(3))
+```

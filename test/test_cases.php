@@ -425,6 +425,58 @@ $test->describe("The ComplexNumber class", function () use ($test) {
       ComplexNumber::sqrt(array(3, 5));
     });
   });
+  $test->it("should have a working static class method ComplexNumber::exp()", function () use ($test) {
+    $z = new ComplexNumber(2, 3); // 2 + 3i
+    $w = new ComplexNumber(-77 / 23, 39 / 27); // -77 / 23 + (39 / 27)i
+    $exp_z = ComplexNumber::exp($z);
+    $exp_w = ComplexNumber::exp($w);
+    // Immutability Tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w), 39 / 27);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w), -77 / 23);
+    // Computational Tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im($exp_z), 1.042743656235904); // source: WolframAlpha
+    $test->assert_fuzzy_equals(ComplexNumber::Re($exp_z), -7.315110094901103); // source: WolframAlpha
+    $test->assert_fuzzy_equals(ComplexNumber::Im($exp_w), 0.034880413800279); // source: WolframAlpha
+    $test->assert_fuzzy_equals(ComplexNumber::Re($exp_w), 0.004430810070815); // source: WolframAlpha
+    // Real Number Tests
+    $e_cubed = ComplexNumber::exp(3); // Input: Positive Integer
+    $e_to_weird_power = ComplexNumber::exp(-3 / 7); // Input: Negative Float
+    $test->assert_fuzzy_equals(ComplexNumber::Im($e_cubed), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($e_cubed), exp(3));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($e_to_weird_power), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($e_to_weird_power), exp(-3 / 7));
+    // Imaginary Number Tests
+    $e_to_the_i = ComplexNumber::exp(new ComplexNumber(0, 1));
+    $e_to_weird_imaginary_power = ComplexNumber::exp(new ComplexNumber(0, -2.77));
+    $test->assert_fuzzy_equals($e_to_the_i->getModulus(), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::arg($e_to_the_i), 1);
+    $test->assert_fuzzy_equals($e_to_weird_imaginary_power->getModulus(), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::arg($e_to_weird_imaginary_power), -2.77);
+    // Euler's Identity Test
+    $zero = ComplexNumber::exp(new ComplexNumber(0, M_PI))->plus(1); // e^(i * PI) + 1 = 0
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero), 0);
+    // Zero Test
+    $one = ComplexNumber::exp(0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one), 1);
+  });
+  $test->it("ComplexNumber::exp() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::exp("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::exp("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::exp(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::exp(array(3, 5));
+    });
+  });
 });
 
 ?>
