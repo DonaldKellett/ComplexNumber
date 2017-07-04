@@ -384,6 +384,47 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_fuzzy_equals($z2->getModulus(), 2.5);
     $test->assert_fuzzy_equals(ComplexNumber::arg($z2), -M_PI / 2);
   });
+  $test->it("should have a working static class method ComplexNumber::sqrt()", function () use ($test) {
+    $z = new ComplexNumber(-7, 24); // -7 + 24i
+    $sqrt_z = ComplexNumber::sqrt($z); // sqrt(-7 + 24i) = 3 + 4i
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 24);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), -7);
+    // Computational Tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_z), 4);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_z), 3);
+    // More tests
+    $sqrt_25 = ComplexNumber::sqrt(25); // sqrt(25) = 5 (= 5 + 0i)
+    $sqrt_minus_zero_point_one_six = ComplexNumber::sqrt(-0.16); // sqrt(-0.16) = 0.4i
+    $sqrt_i = ComplexNumber::sqrt(new ComplexNumber(0, 1)); // sqrt(i) = e^(i * PI / 4)
+    $sqrt_w = ComplexNumber::sqrt(new ComplexNumber(-24, -7)); // sqrt(-24 - 7i) = sqrt(2) / 2 - (7 * sqrt(2) / 2)i
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_25), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_25), 5);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_minus_zero_point_one_six), 0.4);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_minus_zero_point_one_six), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_i), sqrt(2) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_i), sqrt(2) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_w), -7 * sqrt(2) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_w), sqrt(2) / 2);
+    // Zero Test
+    $sqrt_0 = ComplexNumber::sqrt(0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_0), 0);
+  });
+  $test->it("ComplexNumber::sqrt() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::sqrt("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::sqrt("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::sqrt(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::sqrt(array(3, 5));
+    });
+  });
 });
 
 ?>

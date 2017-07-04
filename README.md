@@ -284,3 +284,20 @@ ComplexNumber ComplexNumber::dividedBy(mixed $z)
 ```
 
 Alias of `ComplexNumber::divide()`
+
+### Common Mathematical Functions
+
+#### sqrt
+
+```php
+ComplexNumber ComplexNumber::sqrt(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument `$z` (an integer / float / complex number) and returns its square root as a complex number.  E.g.
+
+```php
+ComplexNumber::sqrt(25); // => 5 + 0i (an instance of ComplexNumber)
+ComplexNumber::sqrt(-1); // => 0 + i
+$z = new ComplexNumber(-7, 24); // -7 + 24i
+ComplexNumber::sqrt($z); // => 3 + 4i
+```

@@ -136,6 +136,14 @@ class ComplexNumber {
     // Alias of ComplexNumber::divide()
     return $this->divide($z);
   }
+  public static function sqrt($z) {
+    // Type check "z" - ensure it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::sqrt(), the argument \"z\" provided must be one of: an integer, a float, a complex number");
+    // If "z" is currently not a complex number, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Apply a suitable formula and return the result
+    return new ComplexNumber(sqrt($z->getModulus()), ComplexNumber::arg($z) / 2, ComplexNumber::MODULUS_ARGUMENT_FORM);
+  }
 }
 
 ?>
