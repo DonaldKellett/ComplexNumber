@@ -278,6 +278,52 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_fuzzy_equals(ComplexNumber::Im($w), -16);
     $test->assert_fuzzy_equals(ComplexNumber::Re($w), -8);
   });
+  $test->it("should have a working instance method ComplexNumber::multiply()", function () use ($test) {
+    $z = new ComplexNumber(-7, 4); // -7 + 4i
+    $z1 = $z->multiply(4.5);
+    $z2 = $z->multiply(-6);
+    $z3 = $z->multiply(new ComplexNumber(5 / 2, 7 / 2));
+    $z4 = $z->multiply($z->getComplexConjugate());
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 4);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), -7);
+    // Computational Tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z1), 18);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z1), -31.5);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z2), -24);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z2), 42);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z3), -14.5);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z3), -31.5);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z4), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z4), 65);
+  });
+  $test->it("ComplexNumber::multiply() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->multiply("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->multiply("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->multiply(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->multiply(array(3, 5));
+    });
+  });
+  $test->it("ComplexNumber::multiply() should have two aliases, ComplexNumber::times() and ComplexNumber::multipliedBy()", function () use ($test) {
+    $z = new ComplexNumber(10, M_PI / 4, ComplexNumber::MODULUS_ARGUMENT_FORM);
+    $z1 = $z->times(new ComplexNumber(1 / 5, -M_PI / 2, ComplexNumber::MODULUS_ARGUMENT_FORM));
+    $z2 = $z->multipliedBy(new ComplexNumber(1 / 2, M_PI / 3, ComplexNumber::MODULUS_ARGUMENT_FORM));
+    $test->assert_fuzzy_equals($z1->getModulus(), 2);
+    $test->assert_fuzzy_equals(ComplexNumber::arg($z1), -M_PI / 4);
+    $test->assert_fuzzy_equals($z2->getModulus(), 5);
+    $test->assert_fuzzy_equals(ComplexNumber::arg($z2), 7 * M_PI / 12);
+  });
 });
 
 ?>

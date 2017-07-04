@@ -226,3 +226,33 @@ ComplexNumber ComplexNumber::minus(mixed $z)
 ```
 
 An alias of `ComplexNumber::subtract()`
+
+#### multiply
+
+```php
+ComplexNumber ComplexNumber::multiply(mixed $z)
+```
+
+An instance method that accepts exactly 1 argument `$z` (an integer / float / complex number) and returns a new complex number which is the product of the two complex numbers.  E.g.
+
+```php
+$z = new ComplexNumber(1, 2); // 1 + 2i
+$w = new ComplexNumber(3, 4); // 3 + 4i
+$z->multiply($w); // => (1 + 2i) * (3 + 4i) = -5 + 10i
+```
+
+#### times
+
+```php
+ComplexNumber ComplexNumber::times(mixed $z)
+```
+
+An alias of `ComplexNumber::multiply()`
+
+#### multipliedBy
+
+```php
+ComplexNumber ComplexNumber::multipliedBy(mixed $z)
+```
+
+An alias of `ComplexNumber::multiply()`

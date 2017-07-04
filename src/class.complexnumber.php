@@ -102,6 +102,22 @@ class ComplexNumber {
     // Alias of ComplexNumber::subtract()
     return $this->subtract($z);
   }
+  public function multiply($z) {
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::multiply(), the argument \"z\" passed in must be either one of: an integer, a float, a complex number");
+    // If "z" is not a complex number, convert it into an instance of ComplexNumber
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Apply a suitable formula and return the result
+    return new ComplexNumber($this->x * $z->x - $this->y * $z->y, $this->x * $z->y + $this->y * $z->x);
+  }
+  public function times($z) {
+    // Alias of ComplexNumber::multiply()
+    return $this->multiply($z);
+  }
+  public function multipliedBy($z) {
+    // Alias of ComplexNumber::multiply()
+    return $this->multiply($z);
+  }
 }
 
 ?>
