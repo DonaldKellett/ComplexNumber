@@ -91,6 +91,17 @@ class ComplexNumber {
     // Alias of ComplexNumber::add()
     return $this->add($z);
   }
+  public function subtract($z) {
+    // Type Checking - confirm that "z" is either of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::subtract(), the argument \"z\" passed in can only be one of: an integer, a float, a complex number");
+    // Subtract "z" from the current complex number and return a new instance
+    if (is_a($z, "ComplexNumber")) return new ComplexNumber($this->x - $z->x, $this->y - $z->y);
+    return new ComplexNumber($this->x - $z, $this->y);
+  }
+  public function minus($z) {
+    // Alias of ComplexNumber::subtract()
+    return $this->subtract($z);
+  }
 }
 
 ?>

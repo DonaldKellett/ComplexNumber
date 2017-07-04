@@ -235,6 +235,49 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_fuzzy_equals(ComplexNumber::Im($w), 2);
     $test->assert_fuzzy_equals(ComplexNumber::Re($w), -1);
   });
+  $test->it("should have a working instance method ComplexNumber::subtract()", function () use ($test) {
+    $z = new ComplexNumber(7.5, -2.3);
+    $z1 = $z->subtract(34.11);
+    $z2 = $z->subtract(-5.579);
+    $z3 = $z->subtract(new ComplexNumber(-8.8, 2.1));
+    $z4 = $z->subtract(new ComplexNumber(-5, -4));
+    // Immutability test on z
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), -2.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 7.5);
+    // Test complex numbers "z1" through "z4"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z1), -2.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z1), -26.61);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z2), -2.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z2), 13.079);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z3), -4.4);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z3), 16.3);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z4), 1.7);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z4), 12.5);
+  });
+  $test->it("ComplexNumber::subtract() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->subtract("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->subtract("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->subtract(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->subtract(array(3, 5));
+    });
+  });
+  $test->it("should have an instance method ComplexNumber::minus() which is an alias of ComplexNumber::subtract()", function () use ($test) {
+    $z = new ComplexNumber(4, -3); // 4 - 3i
+    $w = $z->minus(new ComplexNumber(12, 13)); // (4 - 3i) - (12 + 13i) = -8 - 16i
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w), -16);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w), -8);
+  });
 });
 
 ?>

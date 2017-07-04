@@ -205,3 +205,24 @@ ComplexNumber ComplexNumber::plus(mixed $z)
 ```
 
 An alias of `ComplexNumber::add()`
+
+#### subtract
+
+```php
+ComplexNumber ComplexNumber::subtract(mixed $z)
+```
+
+An instance method that accepts exactly 1 argument, `$z` (an integer / float / complex number), and returns a new complex number equivalent to `$z` subtracted from the current instance.  For example:
+
+```php
+$z = new ComplexNumber(5, 6); // 5 + 6i
+$z->subtract(new ComplexNumber(-10, 10)); // => (5 + 6i) - (-10 + 10i) = 15 - 4i
+```
+
+#### minus
+
+```php
+ComplexNumber ComplexNumber::minus(mixed $z)
+```
+
+An alias of `ComplexNumber::subtract()`
