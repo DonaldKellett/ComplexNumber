@@ -256,3 +256,31 @@ ComplexNumber ComplexNumber::multipliedBy(mixed $z)
 ```
 
 An alias of `ComplexNumber::multiply()`
+
+#### divide
+
+```php
+ComplexNumber ComplexNumber::divide(mixed $z)
+```
+An instance method that receives exactly 1 argument `$z` (a nonzero integer / float / complex number) and returns a new complex number equivalent to the current instance divided by `$z`.  If the provided argument is zero (`0` / `0.0` / `0 + 0i`), throws a `DivisionByZeroError`.  For other invalid input (e.g. string, boolean, array), throws an `InvalidArgumentException`.  E.g.
+
+```php
+$z = new ComplexNumber(10, 5); // 10 + 5i
+$z->divide(new ComplexNumber(1, 2)); // => 4 - 3i
+```
+
+#### over
+
+```php
+ComplexNumber ComplexNumber::over(mixed $z)
+```
+
+Alias of `ComplexNumber::divide()`
+
+#### dividedBy
+
+```php
+ComplexNumber ComplexNumber::dividedBy(mixed $z)
+```
+
+Alias of `ComplexNumber::divide()`

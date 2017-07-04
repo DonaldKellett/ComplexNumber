@@ -118,6 +118,24 @@ class ComplexNumber {
     // Alias of ComplexNumber::multiply()
     return $this->multiply($z);
   }
+  public function divide($z) {
+    // Type checking - confirm that "z" is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::divide(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // Convert "z" into an instance of ComplexNumber if it is currently an integer or float
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // If z = 0 + 0i (= 0) then throw DivisionByZeroError
+    if ($z->x == 0 && $z->y == 0) throw new DivisionByZeroError("In ComplexNumber::divide(), the argument \"z\" provided must be nonzero!");
+    // Apply a suitable formula and return the result
+    return new ComplexNumber(($this->x * $z->x + $this->y * $z->y) / ($z->getModulus() ** 2), ($this->y * $z->x - $this->x * $z->y) / ($z->getModulus() ** 2));
+  }
+  public function over($z) {
+    // Alias of ComplexNumber::divide()
+    return $this->divide($z);
+  }
+  public function dividedBy($z) {
+    // Alias of ComplexNumber::divide()
+    return $this->divide($z);
+  }
 }
 
 ?>

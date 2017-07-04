@@ -324,6 +324,66 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_fuzzy_equals($z2->getModulus(), 5);
     $test->assert_fuzzy_equals(ComplexNumber::arg($z2), 7 * M_PI / 12);
   });
+  $test->it("should have a working instance method ComplexNumber::divide()", function () use ($test) {
+    $z = new ComplexNumber(-23, 37); // -23 + 37i
+    $z1 = $z->divide(17); // Integer Division (positive)
+    $z2 = $z->divide(-3.8); // Float Division (negative)
+    $z3 = $z->divide(new ComplexNumber(9, 7)); // Complex Number Division
+    $z4 = $z->divide(new ComplexNumber(0, -55)); // Division by Imaginary Number
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 37);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), -23);
+    // Computational Tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z1), 37 / 17);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z1), -23 / 17);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z2), -185 / 19);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z2), 115 / 19);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z3), 3.8);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z3), 0.4);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z4), -23 / 55);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z4), -37 / 55);
+  });
+  $test->it("ComplexNumber::divide() should not accept division by zero", function () use ($test) {
+    $test->expect_error("Division by zero should throw DivisionByZeroError", function () {
+      $z = new ComplexNumber(-4, -13);
+      $z->divide(0);
+    });
+    $test->expect_error("Division by zero should throw DivisionByZeroError (2)", function () {
+      $z = new ComplexNumber(-4, -13);
+      $z->divide(0.0);
+    });
+    $test->expect_error("Division by zero should throw DivisionByZeroError (3)", function () {
+      $z = new ComplexNumber(-4, -13);
+      $z->divide(new ComplexNumber(0));
+    });
+  });
+  $test->it("ComplexNumber::divide() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->divide("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->divide("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->divide(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      $z = new ComplexNumber(7.5, -2.3);
+      $z->divide(array(3, 5));
+    });
+  });
+  $test->it("ComplexNumber::divide() should have two aliases, ComplexNumber::over() and ComplexNumber::dividedBy()", function () use ($test) {
+    $z = new ComplexNumber(10, 3 * M_PI / 4, ComplexNumber::MODULUS_ARGUMENT_FORM);
+    $z1 = $z->over(new ComplexNumber(8, M_PI / 2, ComplexNumber::MODULUS_ARGUMENT_FORM));
+    $z2 = $z->dividedBy(new ComplexNumber(4, -3 * M_PI / 4, ComplexNumber::MODULUS_ARGUMENT_FORM));
+    $test->assert_fuzzy_equals($z1->getModulus(), 1.25);
+    $test->assert_fuzzy_equals(ComplexNumber::arg($z1), M_PI / 4);
+    $test->assert_fuzzy_equals($z2->getModulus(), 2.5);
+    $test->assert_fuzzy_equals(ComplexNumber::arg($z2), -M_PI / 2);
+  });
 });
 
 ?>
