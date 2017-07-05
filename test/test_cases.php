@@ -538,6 +538,74 @@ $test->describe("The ComplexNumber class", function () use ($test) {
       ComplexNumber::log(array(3, 5));
     });
   });
+  $test->it("should have a working static class method ComplexNumber::pow()", function () use ($test) {
+    // Real base, real exponent tests
+    $n243 = ComplexNumber::pow(3, 5); // 3 ** 5 === 243 (= 243 + 0i)
+    $one_eighth = ComplexNumber::pow(2, -3); // 2 ** (-3) === 1 / 8 (= 1 / 8 + 0i)
+    $weird_real = ComplexNumber::pow(0.77, -3.65);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($n243), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($n243), 243);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one_eighth), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one_eighth), 1 / 8);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($weird_real), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($weird_real), 0.77 ** -3.65);
+    // Complex base, real exponent tests
+    $minus_one = ComplexNumber::pow(new ComplexNumber(0, 1), 2); // i ^ 2 = -1
+    $z = ComplexNumber::pow(new ComplexNumber(3, 2), 2.5);
+    $w = ComplexNumber::pow(new ComplexNumber(5, 7), -0.33);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($minus_one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($minus_one), -1);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 24.559500865789335);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 2.483763832715803);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w), -0.151676613588827);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w), 0.467574267034797);
+    // Real base, complex exponent tests
+    $z = ComplexNumber::pow(45, new ComplexNumber(2, -1));
+    $w = ComplexNumber::pow(-5.5, new ComplexNumber(1 / 3, 2 / 3));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 1249.656025134110298);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), -1593.419222566997869);
+    // Complex base, complex exponent test
+    $ultimate = ComplexNumber::pow(new ComplexNumber(1, 4), new ComplexNumber(3, 2));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($ultimate), 2.488628503694742);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($ultimate), 4.272043012751457);
+  });
+  $test->it("ComplexNumber::pow() should behave as expected for z = 0 + 0i too", function () use ($test) {
+    // Zero test - all "w" where Re(w) > 0 should return 0 + 0i
+    $zero1 = ComplexNumber::pow(0, 3);
+    $zero2 = ComplexNumber::pow(0.0, 0.178);
+    $zero3 = ComplexNumber::pow(0, new ComplexNumber(4, -3.6));
+    $zero4 = ComplexNumber::pow(0.0, new ComplexNumber(0.33, 7));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero4), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero4), 0);
+    // Zero test - all imaginary "w" (or w = 0 + 0i) should return 1 + 0i
+    $one = ComplexNumber::pow(new ComplexNumber(0.0), new ComplexNumber(0, 13));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one), 1);
+    $one = ComplexNumber::pow(new ComplexNumber(0.0), new ComplexNumber(0, -77.89));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one), 1);
+    $one = ComplexNumber::pow(0, 0.0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one), 1);
+    // Zero test - all "w" such that Re(w) < 0 should throw an error (since complex infinity is not comprehendable)
+    $test->expect_error("A result of \"complex infinity\" should throw an error", function () {
+      ComplexNumber::pow(0, new ComplexNumber(-4.44, 9.766));
+    });
+  });
+  $test->it("ComplexNumber::pow() should type check its arguments", function () use ($test) {
+    $test->expect_error("Strings and booleans should not be accepted", function () {
+      ComplexNumber::pow("Hello World", false);
+    });
+    $test->expect_error("An invalid \"w\" should throw an error even when \"z\" is valid", function () {
+      ComplexNumber::pow(new ComplexNumber(3, 5), array(M_PI));
+    });
+  });
 });
 
 ?>

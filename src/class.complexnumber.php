@@ -3,6 +3,7 @@
 /*
   ComplexNumber
   A simple and comprehensive complex number class for PHP
+  v1.0.0-dev
   (c) Donald Leung
   MIT License
 */
@@ -171,6 +172,25 @@ class ComplexNumber {
     if ($base->x == 0 && $base->y == 0) throw new ArithmeticError("In ComplexNumber::log(), the second argument \"base\" passed in must be nonzero!");
     // Use a suitable logarithmic identity and return the result
     return ComplexNumber::log($z)->dividedBy(ComplexNumber::log($base));
+  }
+  public static function pow($z, $w) {
+    // Type check "z" and "w" - ensure that both are one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::pow(), the first argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    if (!is_int($w) && !is_float($w) && !is_a($w, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::pow(), the second argument \"w\" passed in must be one of: an integer, a float, a complex number");
+    // Convert any existing real numbers into complex numbers for ease of calculation
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    if (!is_a($w, "ComplexNumber")) $w = new ComplexNumber($w);
+    // Special Case: z = 0 + 0i
+    if ($z->x == 0 && $z->y == 0) {
+      // If the real part of w is strictly greater than 0 then the result is 0 + 0i (in agreement with WolframAlpha)
+      if ($w->x > 0) return new ComplexNumber(0);
+      // Else, if the real part of w is exactly 0 then 1 + 0i should be returned (in agreement with the core PHP function: pow())
+      if ($w->x == 0) return new ComplexNumber(1);
+      // Otherwise, the result is complex infinity which should throw an error
+      throw new ArithmeticError("(0 + 0i)^w evaluates to \"complex infinity\" for all \"w\" where Re(w) < 0");
+    }
+    // General Case: apply a suitable formula and return the result
+    return ComplexNumber::exp($w->times(ComplexNumber::log($z)));
   }
 }
 

@@ -4,7 +4,7 @@ A simple and comprehensive complex number class in PHP.  MIT Licensed
 
 ## Overview
 
-- Version: *Work In Progress - come back to stay tuned :smile:*
+- Version: `v1.0.0-dev` (Pre-release: production Ready, in the final stages of testing)
 - Owner: [DonaldKellett](https://github.com/DonaldKellett)
 - License: MIT License
 
@@ -26,7 +26,24 @@ The entire project has been tested and confirmed to work properly in all version
 
 ## Contributing
 
-This project is currently WIP and so cannot yet accept any contributions.  Stay tuned :smile:
+Contributions are now open and welcome :smile:  This can take one of a few possible forms:
+
+### Filing an Issue Report
+
+Found a bug in the source code?  Found a typo?  Or would you like a feature implemented but don't have the time to make a pull request?  If that is the case, then filing an issue report on this Repo is the way to go.
+
+### Making a Pull Request
+
+If you've found and fixed a bug, fixed up a few typos, or straight up implemented a whole new feature, you may make a pull request.  However, there are a few conditions for a pull request to be approved (as long as any *code* changes are involved - fixing typos do not need to pass these tests):
+
+- Any currently existing assertions should not be broken
+- The current test cases should not be modified, unless for a good reason (such as a behavioral change in an already-implemented method)
+- Relevant, new assertions should be added - the more the better, and should also include at least a few edge cases
+- The new assertions you added should pass (obviously)
+- You must ensure that any newly implemented methods do not mutate any of its arguments or the instance itself - you may want to write a few extra tests to confirm that
+- In case of any disputes, both the behavior and the test cases included for everything should agree with the results computed by [WolframAlpha](http://wolframalpha.com).  Alternatively, if there is a specified behavior in a core PHP function that parallels the method you are implementing (such as `pow(0, 0)` returning `1` in the PHP core), you may want your method(s) to agree with that instead.
+
+On top of all that, there is a particular type of pull request that will **always be rejected** - complex number to string conversion (or vice versa).  This is because how a `ComplexNumber` object should be represented in real life is debatable, e.g. should `new ComplexNumber(0, 1)` be displayed as `i`, `1i`, `0 + i` or `0 + 1i`?  If you really want this feature, you should create a separate project that implements this.
 
 ## Class Synopsis (ComplexNumber)
 
@@ -329,4 +346,16 @@ A **static class method** that accepts one to two arguments, the first being `$z
 $z = new ComplexNumber(24, 7); // 24 + 7i
 $b = new ComplexNumber(-3, -4); // -3 - 4i
 ComplexNumber::log($z, $b); // => Logarithm of (24 + 7i) to base (-3 - 4i)
+```
+
+#### pow
+
+```php
+ComplexNumber ComplexNumber::pow(mixed $z, mixed $w)
+```
+
+A **static class method** that given two real/complex numbers `$z` and `$w`, evaluates <em>z<sup>w</sup></em> and returns the result as a new instance of `ComplexNumber` even if both arguments passed in are real numbers.  When `z = 0 (= 0 + 0i)`, <em>z<sup>w</sup></em> is considered to be `0 + 0i` as well as long as `Re(w) > 0`.  When `Re(w) = 0`, <em>z<sup>w</sup></em> is considered to be `1 + 0i` regardless of the imaginary part of `w` (where `z = 0 + 0i`).  Otherwise, when `z = 0` and `Re(w) < 0`, an `ArithmeticError` is thrown.  E.g.
+
+```php
+ComplexNumber::pow(new ComplexNumber(3, 4), new ComplexNumber(-7, 24)); // => (3 + 4i) ^ (-7 + 24i)
 ```
