@@ -1,5 +1,7 @@
 # ComplexNumber
 
+[![Join the chat at https://gitter.im/DonaldKellett/ComplexNumber](https://badges.gitter.im/DonaldKellett/ComplexNumber.svg)](https://gitter.im/DonaldKellett/ComplexNumber?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A simple and comprehensive complex number class in PHP.  MIT Licensed
 
 ## Overview
