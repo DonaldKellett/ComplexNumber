@@ -4,9 +4,21 @@ A simple and comprehensive complex number class in PHP.  MIT Licensed
 
 ## Overview
 
-- Version: `v1.0.0-dev` (Pre-release: production Ready, in the final stages of testing)
+- Version: `v1.0.0` Stable
 - Owner: [DonaldKellett](https://github.com/DonaldKellett)
 - License: MIT License
+
+### Why use *this* implementation?
+
+Although this project most definitely isn't the first PHP complex number handling software out there, here are just a few reasons why you should use this implementation over most other common implementations:
+
+1. Immutability - The `ComplexNumber` class in this project has been carefully designed such that no amount of operations can alter the instance of the complex number itself and it is impossible to reassign a different value to an instance of `ComplexNumber` without raising an error/exception of some kind.  This means that it is impossible for you to accidentally change the "value" of a complex number itself and cause weird, unexpected behavior - the very nature of the class/instance prevents you from doing so.  This is also the behavior that makes most sense as you can't change the properties of a *primitive value* (e.g. an integer or float in PHP), can you?
+2. Strict input validation - Each instance and class method in this implementation always type checks its arguments to ensure that you are not passing `"Hello World"` into a strictly mathematical `ComplexNumber::exp()` function or trying to create a complex number with value `true + array(3, 5, "Goodbye World")i` :wink:
+3. Mathematician-friendly - Many of the instance and class methods of this implementation use naming conventions and notation that are familiar to hardcore mathematicians to avoid any possible confusion, such as `ComplexNumber::Im()` and `ComplexNumber::arg()` (which return the imaginary component and argument of a complex number respectively).
+4. Ease of readability - the large number of aliases for certain primitive operations (such as `ComplexNumber::times()` and `ComplexNumber::multipliedBy()` for `ComplexNumber::multiply()`) means that you can use different versions of the same operation in your code depending on the context to make it read like plain English and not some cryptic Martian language.
+5. Lenient input types - All methods in the `ComplexNumber` class that accept one or more arguments treat integers, floats and complex numbers as, well, *numbers* - there is no distinction between the three.
+6. Consistent return types - On the other hand, no matter what type of number you pass into certain methods of the `ComplexNumber` class, you are always guaranteed to receive a new instance of `ComplexNumber` as output so you can safely chain any number of instance/class methods in your calculations, so long as you don't divide by zero or make another type of math error.  If you *do* divide by zero, well, I'm afraid I can't help you :wink:  The only exceptions to this rule are the ones that extract crucial information from the complex number itself - these always return a real number (integer/float).
+7. Powerful mathematical functions beyond primitive operations - While *most* complex number implementations out there go no further than, perhaps, the `sqrt()` function, this implementation goes well beyond that and supports serious mathematical operations such as the generalized exponential and logarithmic functions.
 
 ## File Synopsis
 
@@ -22,7 +34,7 @@ Filename | Description
 
 ## PHP Version
 
-The entire project has been tested and confirmed to work properly in all versions of PHP 7.  Furthermore, the `ComplexNumber` class should also work in PHP 5 (and maybe even some versions of PHP 4) but this has yet to be officially confirmed.  The PHPTester testing framework (version 3.1.0) requires PHP 7 or later but that is irrelevant to this project (except for viewing the passing assertions).
+The entire project has been tested and confirmed to work properly in all versions of PHP 7.  Furthermore, the `ComplexNumber` class should also work in PHP 5.6.x+ but this has yet to be officially confirmed.  The PHPTester testing framework (version 3.1.0) requires PHP 7 or later but that is irrelevant to this project (except for viewing the passing assertions).
 
 ## Contributing
 
@@ -106,10 +118,10 @@ $z->getImaginary(); // => 5
 #### Im(z)
 
 ```php
-mixed ComplexNumber::Im(ComplexNumber $z)
+mixed ComplexNumber::Im(mixed $z)
 ```
 
-A **static class method** that is essentially an alias of `ComplexNumber::getImaginary()` but receives the complex number `$z` as its one and only argument.  Returns the imaginary component of `$z` as an integer or float.  If `$z` is anything but an instance of `ComplexNumber`, an `InvalidArgumentException` is thrown (even for integers and floats).  E.g.
+A **static class method** that is essentially an alias of `ComplexNumber::getImaginary()` but receives the real or complex number `$z` as its one and only argument.  Returns the imaginary component of `$z` as an integer or float.  If `$z` is anything but a number (real or complex), an `InvalidArgumentException` is thrown.  E.g.
 
 ```php
 $z = new ComplexNumber(-12, -5); // -12 - 5i
@@ -132,10 +144,10 @@ $z->getReal(); // => -7
 #### Re(z)
 
 ```php
-mixed ComplexNumber::Re(ComplexNumber $z);
+mixed ComplexNumber::Re(mixed $z);
 ```
 
-A **static class method** that accepts 1 argument `$z`, an instance of `ComplexNumber`, and returns its real component as an integer or float.  If `$z` is not a `ComplexNumber`, an `InvalidArgumentException` is thrown (including for integers and floats).  For example:
+A **static class method** that accepts 1 argument `$z`, a real or complex number, and returns its real component as an integer or float.  If `$z` is not a number, an `InvalidArgumentException` is thrown.  For example:
 
 ```php
 $z = new ComplexNumber(1, 3); // 1 + 3i
@@ -153,6 +165,19 @@ An instance method that receives no arguments and returns the modulus of the com
 ```php
 $z = new ComplexNumber(1, sqrt(3));
 $z->getModulus(); // => 2.0 (approx.)
+```
+
+#### abs(z) (i.e. |z|)
+
+```php
+float ComplexNumber::abs(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument, `$z` (a real or complex number), and returns its absolute value (i.e. modulus) as a float.  E.g.
+
+```php
+$z = new ComplexNumber(3, 4); // 3 + 4i
+ComplexNumber::abs($z); // => 5.0 (approx.)
 ```
 
 #### getArgument
@@ -173,10 +198,10 @@ $z->getArgument(); // => PI / 4 (approx.)
 #### arg(z)
 
 ```php
-float ComplexNumber::arg(ComplexNumber $z)
+float ComplexNumber::arg(mixed $z)
 ```
 
-A **static class method** that accepts one argument `$z`, an instance of `ComplexNumber`, and returns its argument `arg(z)` which is a float in the range `(-PI, PI]`.  For example:
+A **static class method** that accepts one argument `$z`, a real or complex number, and returns its argument `arg(z)` which is a float in the range `(-PI, PI]`.  For example:
 
 ```php
 $z = new ComplexNumber(3, M_PI / 2, ComplexNumber::MODULUS_ARGUMENT_FORM); // 3e^(i * PI / 2)

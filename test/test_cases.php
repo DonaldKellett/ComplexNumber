@@ -163,19 +163,136 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $zero = new ComplexNumber(0);
     $test->assert_fuzzy_equals($zero->getArgument(), 0);
   });
-  $test->it("should support the alias static class method ComplexNumber::arg() to conform to mathematical notation", function () use ($test) {
-    $z = new ComplexNumber(4, -2 * M_PI / 3, ComplexNumber::MODULUS_ARGUMENT_FORM);
-    $test->assert_fuzzy_equals(ComplexNumber::arg($z), -2 * M_PI / 3);
+  $test->it("The static class method ComplexNumber::Im() should accept real and complex numbers alike and return their imaginary components", function () use ($test) {
+    // Complex number tests
+    $z1 = new ComplexNumber(4, 5);
+    $z2 = new ComplexNumber(-3.684, 10);
+    $z3 = new ComplexNumber(-5, -3.5);
+    $z4 = new ComplexNumber(-7.777, -8.166);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z1), 5);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z2), 10);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z3), -3.5);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z4), -8.166);
+    // Real number tests - Im(z) should return 0 every time
+    $test->assert_fuzzy_equals(ComplexNumber::Im(756), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im(0.314), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im(-7.11453), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im(-2), 0);
+    // Zero Tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im(0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im(0.0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im(new ComplexNumber(0)), 0);
   });
-  $test->it("Im(z), Re(z) and arg(z) should throw with invalid input", function () use ($test) {
-    $test->expect_error("Ordinary number arguments should be rejected", function () {
-      ComplexNumber::Im(5);
+  $test->it("The static class method ComplexNumber::Re() should accept real and complex numbers alike and return their real components", function () use ($test) {
+    // Complex number tests
+    $z1 = new ComplexNumber(4, 5);
+    $z2 = new ComplexNumber(-3.684, 10);
+    $z3 = new ComplexNumber(-5, -3.5);
+    $z4 = new ComplexNumber(-7.777, -8.166);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z1), 4);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z2), -3.684);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z3), -5);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z4), -7.777);
+    // Real number tests - Re(z) should return the number itself every time
+    $test->assert_fuzzy_equals(ComplexNumber::Re(756), 756);
+    $test->assert_fuzzy_equals(ComplexNumber::Re(0.314), 0.314);
+    $test->assert_fuzzy_equals(ComplexNumber::Re(-7.11453), -7.11453);
+    $test->assert_fuzzy_equals(ComplexNumber::Re(-2), -2);
+    // Zero Tests
+    $test->assert_fuzzy_equals(ComplexNumber::Re(0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re(0.0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re(new ComplexNumber(0.0)), 0);
+  });
+  $test->it("The static class method ComplexNumber::arg() should accept real and complex numbers alike and return their arguments", function () use ($test) {
+    // Complex number tests
+    $z = new ComplexNumber(24, -7);
+    $w = new ComplexNumber(37, -5 * M_PI / 6, ComplexNumber::MODULUS_ARGUMENT_FORM);
+    $test->assert_fuzzy_equals(ComplexNumber::arg($z), -0.283794109208328);
+    $test->assert_fuzzy_equals(ComplexNumber::arg($w), -5 * M_PI / 6);
+    // Real number tests - positive and negative
+    $test->assert_fuzzy_equals(ComplexNumber::arg(12367), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::arg(17.3354), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::arg(0.002066), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::arg(-12367), M_PI);
+    $test->assert_fuzzy_equals(ComplexNumber::arg(-17.3354), M_PI);
+    $test->assert_fuzzy_equals(ComplexNumber::arg(-0.002066), M_PI);
+    // Zero tests - the convention arg(0 + 0i) = 0 should be used (source: WolframAlpha)
+    $test->assert_fuzzy_equals(ComplexNumber::arg(0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::arg(0.0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::arg(new ComplexNumber(0.0, 0.0)), 0);
+  });
+  $test->it("should have a working static class method ComplexNumber::abs()", function () use ($test) {
+    // Complex number tests
+    $z = new ComplexNumber(69, 1733);
+    $w = new ComplexNumber(-0.01232, -3.112);
+    $test->assert_fuzzy_equals(ComplexNumber::abs($z), 5 * sqrt(120322));
+    $test->assert_fuzzy_equals(ComplexNumber::abs($w), 3.112024386536841);
+    // Real number tests
+    $test->assert_fuzzy_equals(ComplexNumber::abs(234432), 234432);
+    $test->assert_fuzzy_equals(ComplexNumber::abs(445.8876), 445.8876);
+    $test->assert_fuzzy_equals(ComplexNumber::abs(0.0013443), 0.0013443);
+    $test->assert_fuzzy_equals(ComplexNumber::abs(-234432), 234432);
+    $test->assert_fuzzy_equals(ComplexNumber::abs(-445.8876), 445.8876);
+    $test->assert_fuzzy_equals(ComplexNumber::abs(-0.0013443), 0.0013443);
+    // Zero tests
+    $test->assert_fuzzy_equals(ComplexNumber::abs(0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::abs(0.0), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::abs(new ComplexNumber(0.0)), 0);
+  });
+  $test->it("ComplexNumber::Im() should throw with invalid input", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::Im("11.23");
     });
-    $test->expect_error("Boolean arguments should be rejected", function () {
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::Im("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::Im(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::Im(array(3, 5));
+    });
+  });
+  $test->it("ComplexNumber::Re() should throw with invalid input", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::Re("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::Re("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
       ComplexNumber::Re(true);
     });
-    $test->expect_error("Strings should be rejected", function () {
-      ComplexNumber::arg("2 + 3i");
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::Re(array(3, 5));
+    });
+  });
+  $test->it("ComplexNumber::arg() should throw with invalid input", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::arg("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::arg("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::arg(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::arg(array(3, 5));
+    });
+  });
+  $test->it("ComplexNumber::abs() should throw with invalid input", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::abs("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::abs("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::abs(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::abs(array(3, 5));
     });
   });
   $test->it("should have a working ComplexNumber::getComplexConjugate() method", function () use ($test) {

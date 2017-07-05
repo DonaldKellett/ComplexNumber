@@ -3,7 +3,7 @@
 /*
   ComplexNumber
   A simple and comprehensive complex number class for PHP
-  v1.0.0-dev
+  v1.0.0
   (c) Donald Leung
   MIT License
 */
@@ -49,16 +49,20 @@ class ComplexNumber {
   public static function Re($z) {
     // Accepts a complex number "z" as its only argument and returns its real component "x"
     // Alias of ComplexNumber::getReal()
-    // Type check "z" - confirm that it is a complex number
-    if (!is_a($z, "ComplexNumber")) throw new InvalidArgumentException("ComplexNumber::Re() can only accept an instance of ComplexNumber as its only argument!");
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("ComplexNumber::Re() can only accept an instance of ComplexNumber as its only argument!");
+    // If "z" is not yet a complex number convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
     // Return the real component "x" of the complex number "z" via a call to ComplexNumber::getReal()
     return $z->getReal();
   }
   public static function Im($z) {
     // Accepts a complex number "z" as its only argument and returns its imaginary component "y"
     // Alias of ComplexNumber::getImaginary()
-    // Type check "z" - confirm that it is a complex number
-    if (!is_a($z, "ComplexNumber")) throw new InvalidArgumentException("ComplexNumber::Im() can only accept an instance of ComplexNumber as its only argument!");
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("ComplexNumber::Im() can only accept an instance of ComplexNumber as its only argument!");
+    // If "z" is not yet a complex number convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
     // Return the imaginary component "y" of the complex number "z" via a call to ComplexNumber::getImaginary()
     return $z->getImaginary();
   }
@@ -72,10 +76,20 @@ class ComplexNumber {
   }
   public static function arg($z) {
     // Alias of ComplexNumber::getArgument() - better mathematical notation
-    // Type check "z" to confirm it is a complex number
-    if (!is_a($z, "ComplexNumber")) throw new InvalidArgumentException("ComplexNumber::arg() can only receive an instance of ComplexNumber as its only argument!");
+    // Type check "z" to confirm it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("ComplexNumber::arg() can only receive an instance of ComplexNumber as its only argument!");
+    // If "z" is not yet a complex number convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
     // Return the argument of z by a call to ComplexNumber::getArgument()
     return $z->getArgument();
+  }
+  public static function abs($z) {
+    // Type check "z" - ensure it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::abs(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not already a complex number, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Return the absolute value (i.e. the modulus) of "z"
+    return $z->getModulus();
   }
   public function getComplexConjugate() {
     // Returns the complex conjugate "z* = x - iy" of a complex number "z"
