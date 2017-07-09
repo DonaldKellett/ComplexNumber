@@ -927,7 +927,7 @@ $test->describe("The ComplexNumber class", function () use ($test) {
       ComplexNumber::tanh(array(3, 5));
     });
   });
-  $test->it("should have a working static class method ComplexNumber::asin()", function () use ($test) {
+  $test->it("should have a working static class method ComplexNumber::asinh()", function () use ($test) {
     // Real number tests
     $z1 = ComplexNumber::asinh(79);
     $z2 = ComplexNumber::asinh(3.337);
