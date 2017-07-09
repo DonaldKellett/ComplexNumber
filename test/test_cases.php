@@ -853,6 +853,80 @@ $test->describe("The ComplexNumber class", function () use ($test) {
       ComplexNumber::cosh(array(3, 5));
     });
   });
+  $test->it("should have a working static class method ComplexNumber::tanh()", function () use ($test) {
+    // Real number tests
+    $z1 = ComplexNumber::tanh(7);
+    $z2 = ComplexNumber::tanh(0.00644);
+    $z3 = ComplexNumber::tanh(-0.00644);
+    $z4 = ComplexNumber::tanh(-7);
+    $test->expect(is_a($z1, "ComplexNumber"));
+    $test->expect(is_a($z2, "ComplexNumber"));
+    $test->expect(is_a($z3, "ComplexNumber"));
+    $test->expect(is_a($z4, "ComplexNumber"));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z4), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z1), 0.999998336943945);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z2), 0.006439910971482);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z3), -0.006439910971482);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z4), -0.999998336943945);
+    // Complex number tests
+    $z = new ComplexNumber(-2.5, -3.1); // -2.5 - 3.1i
+    $w1 = ComplexNumber::tanh($z);
+    $w2 = ComplexNumber::tanh(new ComplexNumber(1, 7));
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), -3.1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), -2.5);
+    // Computational Tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), 0.001104816913148);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), -0.986659661476993);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), 0.254071403315039);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), 0.930218727078869);
+    // Zero Tests
+    $zero1 = ComplexNumber::tanh(0);
+    $zero2 = ComplexNumber::tanh(0.0);
+    $zero3 = ComplexNumber::tanh(new ComplexNumber(0.0, 0.0));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero3), 0);
+    // Other Edge Cases
+    $edge1 = ComplexNumber::tanh(new ComplexNumber(1, -M_PI / 2));
+    $edge2 = ComplexNumber::tanh(new ComplexNumber(-0.5, 3 * M_PI / 2));
+    $test->expect(is_a($edge1, "ComplexNumber"));
+    $test->expect(is_a($edge2, "ComplexNumber"));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($edge1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($edge2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($edge1), 1.313035285499331);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($edge2), -2.163953413738653);
+    // Extreme Edge Cases - Complex Infinity (should throw ArithmeticError)
+    $test->expect_error("A result of \"complex infinity\" should throw an error", function () {
+      ComplexNumber::tanh(new ComplexNumber(0, -M_PI / 2));
+    });
+    $test->expect_error("A result of \"complex infinity\" should throw an error (2)", function () {
+      ComplexNumber::tanh(new ComplexNumber(0, 5 * M_PI / 2));
+    });
+    $test->expect_error("A result of \"complex infinity\" should throw an error (3)", function () {
+      ComplexNumber::tanh(new ComplexNumber(0, -7 * M_PI / 2));
+    });
+  });
+  $test->it("ComplexNumber::tanh() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::tanh("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::tanh("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::tanh(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::tanh(array(3, 5));
+    });
+  });
 });
 
 ?>

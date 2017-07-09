@@ -414,3 +414,16 @@ A **static class method** that receives exactly 1 argument `z` (a real or comple
 $z = new ComplexNumber(7, 24); // 7 + 24i
 ComplexNumber::cosh($z); // => cosh(7 + 24i)
 ```
+
+#### tanh(z)
+
+```php
+ComplexNumber ComplexNumber::tanh(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument `z`, a real or complex number, and returns the value of `tanh(z)`.  In the special case where `z` satisfies `z = i * pi * n - i * pi / 2` (where `n` is any integer), an `ArithmeticError` is thrown.  E.g.
+
+```php
+$z = new ComplexNumber(3, 2); // 3 + 2i
+ComplexNumber::tanh($z); // => tanh(3 + 2i)
+```

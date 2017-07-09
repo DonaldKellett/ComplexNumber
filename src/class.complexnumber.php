@@ -222,6 +222,16 @@ class ComplexNumber {
     // Use the exponential form of cosh(z) and return the result
     return ComplexNumber::exp($z)->plus(ComplexNumber::exp((new ComplexNumber(-1))->times($z)))->dividedBy(2);
   }
+  public static function tanh($z) {
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::tanh(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not yet an instance of ComplexNumber, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Special Case: where z = i * pi * n - i * pi / 2, tanh(z) evaluates to complex infinity.  Throw an ArithmeticError in this case
+    if ($z->x == 0 && fmod($z->y + M_PI / 2, M_PI) == 0.0) throw new ArithmeticError("When z = i * pi * n - i * pi / 2 (where n is an integer), tanh(z) evaluates to \"complex infinity\"!");
+    // Otherwise, use the hyperbolic identity tanh(z) = sinh(z) / cosh(z) and return the result
+    return ComplexNumber::sinh($z)->dividedBy(ComplexNumber::cosh($z));
+  }
 }
 
 ?>
