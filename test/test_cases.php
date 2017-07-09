@@ -792,6 +792,67 @@ $test->describe("The ComplexNumber class", function () use ($test) {
       ComplexNumber::sinh(array(3, 5));
     });
   });
+  $test->it("should have a working static class method ComplexNumber::cosh()", function () use ($test) {
+    // Real number tests
+    $z1 = ComplexNumber::cosh(-5);
+    $z2 = ComplexNumber::cosh(-0.967);
+    $z3 = ComplexNumber::cosh(0.967);
+    $z4 = ComplexNumber::cosh(5);
+    $test->expect(is_a($z1, "ComplexNumber"));
+    $test->expect(is_a($z2, "ComplexNumber"));
+    $test->expect(is_a($z3, "ComplexNumber"));
+    $test->expect(is_a($z4, "ComplexNumber"));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z4), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z1), 74.209948524787844);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z2), 1.505132239831420);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z3), 1.505132239831420);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z4), 74.209948524787844);
+    // Complex number tests
+    $z = new ComplexNumber(2, -6.79);
+    $w1 = ComplexNumber::cosh($z);
+    $w2 = ComplexNumber::cosh(new ComplexNumber(1.5, 1.5));
+    $w3 = ComplexNumber::cosh(new ComplexNumber(-0.01, 0.0019));
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), -6.79);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 2);
+    // Computational tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), -1.760459239136031);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), 3.289269152603249);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), 2.123945581536093);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), 0.166402873358505);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w3), -0.0000190003052364);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w3), 1.000048195326960);
+    // Zero tests
+    $one1 = ComplexNumber::cosh(0);
+    $one2 = ComplexNumber::cosh(0.0);
+    $one3 = ComplexNumber::cosh(new ComplexNumber(0));
+    $test->expect(is_a($one1, "ComplexNumber"));
+    $test->expect(is_a($one2, "ComplexNumber"));
+    $test->expect(is_a($one3, "ComplexNumber"));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one1), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one2), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one3), 1);
+  });
+  $test->it("ComplexNumber::cosh() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::cosh("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::cosh("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::cosh(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::cosh(array(3, 5));
+    });
+  });
 });
 
 ?>

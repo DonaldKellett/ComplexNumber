@@ -214,6 +214,14 @@ class ComplexNumber {
     // Use the exponential form of hyperbolic sine and return the result
     return ComplexNumber::exp($z)->minus(ComplexNumber::exp((new ComplexNumber(-1))->times($z)))->dividedBy(2);
   }
+  public static function cosh($z) {
+    // Type check "z" - confirm it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::cosh(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not an instance of ComplexNumber yet, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Use the exponential form of cosh(z) and return the result
+    return ComplexNumber::exp($z)->plus(ComplexNumber::exp((new ComplexNumber(-1))->times($z)))->dividedBy(2);
+  }
 }
 
 ?>

@@ -401,3 +401,16 @@ A **static class method** that receives exactly 1 argument, `$z` (a real or comp
 $z = new ComplexNumber(4, 5); // 4 + 5i
 ComplexNumber::sinh($z); // => sinh(4 + 5i)
 ```
+
+#### cosh(z)
+
+```php
+ComplexNumber ComplexNumber::cosh(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument `z` (a real or complex number) and returns the result of `cosh(z)`.  E.g.
+
+```php
+$z = new ComplexNumber(7, 24); // 7 + 24i
+ComplexNumber::cosh($z); // => cosh(7 + 24i)
+```
