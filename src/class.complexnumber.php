@@ -232,6 +232,18 @@ class ComplexNumber {
     // Otherwise, use the hyperbolic identity tanh(z) = sinh(z) / cosh(z) and return the result
     return ComplexNumber::sinh($z)->dividedBy(ComplexNumber::cosh($z));
   }
+  public static function asinh($z) {
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::asinh(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Use the logarithmic form of arsinh(z) and return the result
+    return ComplexNumber::log($z->plus(ComplexNumber::sqrt((new ComplexNumber(1))->plus(ComplexNumber::pow($z, 2)))));
+  }
+  public static function arsinh($z) {
+    // Alias of ComplexNumber::asinh()
+    return ComplexNumber::asinh($z);
+  }
 }
 
 ?>

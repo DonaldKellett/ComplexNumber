@@ -427,3 +427,24 @@ A **static class method** that receives exactly 1 argument `z`, a real or comple
 $z = new ComplexNumber(3, 2); // 3 + 2i
 ComplexNumber::tanh($z); // => tanh(3 + 2i)
 ```
+
+#### asinh
+
+```php
+ComplexNumber ComplexNumber::asinh(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument `z` (a real or complex number) and returns the *approximate* value of `arsinh(z)` - there may be *minor* floating point errors arising from multiple invocations of the complex logarithmic function but the difference from the true value should be negligible in most real-life cases.  E.g.
+
+```php
+$z = new ComplexNumber(1 / 2, 1 / 3); // 1 / 2 + (1 / 3)i
+ComplexNumber::asinh($z); // => arsinh(1 / 2 + (1 / 3)i)
+```
+
+#### arsinh(z)
+
+```php
+ComplexNumber ComplexNumber::arsinh(mixed $z)
+```
+
+Alias of `ComplexNumber::asinh()`
