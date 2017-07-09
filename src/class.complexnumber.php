@@ -206,6 +206,14 @@ class ComplexNumber {
     // General Case: apply a suitable formula and return the result
     return ComplexNumber::exp($w->times(ComplexNumber::log($z)));
   }
+  public static function sinh($z) {
+    // Type check "z" - confirm it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::sinh(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not already an instance of ComplexNumber, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Use the exponential form of hyperbolic sine and return the result
+    return ComplexNumber::exp($z)->minus(ComplexNumber::exp((new ComplexNumber(-1))->times($z)))->dividedBy(2);
+  }
 }
 
 ?>

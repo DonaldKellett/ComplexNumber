@@ -386,3 +386,18 @@ A **static class method** that given two real/complex numbers `$z` and `$w`, eva
 ```php
 ComplexNumber::pow(new ComplexNumber(3, 4), new ComplexNumber(-7, 24)); // => (3 + 4i) ^ (-7 + 24i)
 ```
+
+### Hyperbolic / Inverse hyperbolic functions
+
+#### sinh(z)
+
+```php
+ComplexNumber ComplexNumber::sinh(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument, `$z` (a real or complex number), and returns the result of `sinh(z)`.  E.g.
+
+```php
+$z = new ComplexNumber(4, 5); // 4 + 5i
+ComplexNumber::sinh($z); // => sinh(4 + 5i)
+```
