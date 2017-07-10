@@ -244,6 +244,18 @@ class ComplexNumber {
     // Alias of ComplexNumber::asinh()
     return ComplexNumber::asinh($z);
   }
+  public static function acosh($z) {
+    // Type check "z" - confirm it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::acosh(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Use the logarithmic form as provided by WolframAlpha and return the result
+    return ComplexNumber::log($z->plus(ComplexNumber::sqrt((new ComplexNumber(-1))->plus($z))->times(ComplexNumber::sqrt((new ComplexNumber(1))->plus($z)))));
+  }
+  public static function arcosh($z) {
+    // Alias of ComplexNumber::acosh()
+    return ComplexNumber::acosh($z);
+  }
 }
 
 ?>

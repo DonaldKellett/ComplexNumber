@@ -448,3 +448,24 @@ ComplexNumber ComplexNumber::arsinh(mixed $z)
 ```
 
 Alias of `ComplexNumber::asinh()`
+
+#### acosh
+
+```php
+ComplexNumber ComplexNumber::acosh(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument `z` (a real or complex number) and returns the result of `arcosh(z)`.  E.g.
+
+```php
+$z = new ComplexNumber(1, 1); // 1 + i
+ComplexNumber::acosh($z); // => arcosh(1 + i)
+```
+
+#### arcosh(z)
+
+```php
+ComplexNumber ComplexNumber::arcosh(mixed $z)
+```
+
+Alias of `ComplexNumber::acosh()`
