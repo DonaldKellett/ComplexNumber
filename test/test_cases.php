@@ -1051,6 +1051,76 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_fuzzy_equals(ComplexNumber::Im($z), 1.177052315686092);
     $test->assert_fuzzy_equals(ComplexNumber::Re($z), 3.259138188000824);
   });
+  $test->it("should have a working static class method ComplexNumber::atanh()", function () use ($test) {
+    // Real number tests
+    $z1 = ComplexNumber::atanh(23);
+    $z2 = ComplexNumber::atanh(0.5);
+    $z3 = ComplexNumber::atanh(-0.5);
+    $z4 = ComplexNumber::atanh(-23);
+    $test->expect(is_a($z1, "ComplexNumber"));
+    $test->expect(is_a($z2, "ComplexNumber"));
+    $test->expect(is_a($z3, "ComplexNumber"));
+    $test->expect(is_a($z4, "ComplexNumber"));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z1), -1.570796326794897);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z1), 0.043505688494815);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z2), 0.549306144334055);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z3), -0.549306144334055);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z4), 1.570796326794897);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z4), -0.043505688494815);
+    // Complex number tests
+    $z = new ComplexNumber(-1, 1.5); // -1 + 1.5i
+    $w1 = ComplexNumber::atanh($z);
+    $w2 = ComplexNumber::atanh(new ComplexNumber(-43, 33));
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 1.5);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), -1);
+    // Computational tests
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), 1.107148717794091);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), -0.255412811882995);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), 1.559562262501984);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), -0.014635004812860);
+    // Zero tests
+    $zero1 = ComplexNumber::atanh(0);
+    $zero2 = ComplexNumber::atanh(0.0);
+    $zero3 = ComplexNumber::atanh(new ComplexNumber(0));
+    $test->expect(is_a($zero1, "ComplexNumber"));
+    $test->expect(is_a($zero2, "ComplexNumber"));
+    $test->expect(is_a($zero3, "ComplexNumber"));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero3), 0);
+    // Edge tests - z = +-1
+    $test->expect_error("A result of \"positive infinity\" should throw an error", function () use ($test) {
+      ComplexNumber::atanh(1.0);
+    });
+    $test->expect_error("A result of \"negative infinity\" should throw an error", function () use ($test) {
+      ComplexNumber::atanh(new ComplexNumber(-1, 0.0));
+    });
+  });
+  $test->it("ComplexNumber::atanh() should type check its arguments", function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::atanh("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::atanh("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::atanh(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::atanh(array(3, 5));
+    });
+  });
+  $test->it("ComplexNumber::atanh() should have an alias ComplexNumber::artanh()", function () use ($test) {
+    $z = ComplexNumber::artanh(new ComplexNumber(3, 2));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 1.409921049596576);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 0.229072682968539);
+  });
 });
 
 ?>

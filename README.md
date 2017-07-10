@@ -2,11 +2,11 @@
 
 [![Join the chat at https://gitter.im/DonaldKellett/ComplexNumber](https://badges.gitter.im/DonaldKellett/ComplexNumber.svg)](https://gitter.im/DonaldKellett/ComplexNumber?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A simple and comprehensive complex number class in PHP.  MIT Licensed
+A simple yet comprehensive complex number class in PHP.  MIT Licensed
 
 ## Overview
 
-- Version: `v1.0.0` Stable
+- Version: `v1.1.0` Stable
 - Owner: [DonaldKellett](https://github.com/DonaldKellett)
 - License: MIT License
 
@@ -33,6 +33,52 @@ Filename | Description
 `test/` | Directory containing the test cases for this project using [PHPTester](https://github.com/DonaldKellett/PHPTester) as the TDD framework
 `test/test_cases.php` | The entire test suite for this project
 `test/PHPTester-3.1.0/*` | The PHPTester testing framework (version 3.1.0)
+
+## Getting Started
+
+To start using this implementation of complex numbers in PHP, simply follow the steps outlined below:
+
+1. Click on the tab which says "*n* releases" near the top of this Repo to view all the stable releases of this software and download a stable release of your choice (ideally the latest one).  Do **NOT** directly "Download ZIP" from the repo!
+2. Place the files somewhere in your PHP project and link to it, like such: `require '/path/to/your/class.complexnumber.php';`
+3. The software is ready to go! :smile:
+
+Below is a full example for your reference:
+
+```php
+<?php
+
+// Link to the ComplexNumber class
+require '/path/to/your/class.complexnumber.php';
+
+// Define a complex number in rectangular form
+$z = new ComplexNumber(3, 4); // 3 + 4i
+// Define a complex number in modulus-argument form
+$w = new ComplexNumber(sqrt(2), M_PI / 4, ComplexNumber::MODULUS_ARGUMENT_FORM); // sqrt(2) * e^(i * pi / 4) = 1 + i
+// Define a real number that is an instance of ComplexNumber - simply omit the second argument
+$three = new ComplexNumber(3);
+
+// Read the real and imaginary components of our complex numbers
+echo ComplexNumber::Im($z) . "\r\n"; // prints "4"
+echo ComplexNumber::Re($w) . "\r\n"; // prints "1"
+
+// Get the modulus and argument of our complex number
+echo ComplexNumber::abs($three) . "\r\n"; // prints "3.0"
+echo ComplexNumber::arg($w) . "\r\n"; // prints a value equal to pi / 4
+
+// Add two complex numbers
+$sum = $z->plus($w); // (3 + 4i) + (1 + i) = 4 + 5i
+// Subtraction, multiplication and division are also possible
+
+// Compute the complex exponential function for z = 3 + 4i
+$exp_z = ComplexNumber::exp($z); // e^(3 + 4i) = e^3 * e^(4i) = e^3 * (cos(4) + isin(4))
+
+// Read the real and imaginary components of $exp_z
+echo ComplexNumber::Im($exp_z) . "\r\n"; // prints a value equal to e^3 * sin(4)
+echo ComplexNumber::Re($exp_z) . "\r\n"; // prints a value equal to e^3 * cos(4)
+// Many other powerful mathematical functions are also available - please refer to the Documentation (aka "Class Synopsis") below for full details
+
+?>
+```
 
 ## PHP Version
 
@@ -389,6 +435,8 @@ ComplexNumber::pow(new ComplexNumber(3, 4), new ComplexNumber(-7, 24)); // => (3
 
 ### Hyperbolic / Inverse hyperbolic functions
 
+The complex hyperbolic / inverse hyperbolic functions have been implemented since `v1.1.0`.
+
 #### sinh(z)
 
 ```php
@@ -469,3 +517,24 @@ ComplexNumber ComplexNumber::arcosh(mixed $z)
 ```
 
 Alias of `ComplexNumber::acosh()`
+
+#### atanh
+
+```php
+ComplexNumber ComplexNumber::atanh(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument `z` (a real or complex number) and returns the result of `artanh(z)`.  In the case where `z = +-1`, an `ArithmeticError` is thrown.  E.g.
+
+```php
+$z = new ComplexNumber(11, 23); // 11 + 23i
+ComplexNumber::atanh($z); // => artanh(11 + 23i)
+```
+
+#### artanh(z)
+
+```php
+ComplexNumber ComplexNumber::artanh(mixed $z)
+```
+
+Alias of `ComplexNumber::atanh()`

@@ -3,7 +3,7 @@
 /*
   ComplexNumber
   A simple and comprehensive complex number class for PHP
-  v1.0.0
+  v1.1.0
   (c) Donald Leung
   MIT License
 */
@@ -255,6 +255,22 @@ class ComplexNumber {
   public static function arcosh($z) {
     // Alias of ComplexNumber::acosh()
     return ComplexNumber::acosh($z);
+  }
+  public static function atanh($z) {
+    // Type check "z" - confirm it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, "ComplexNumber")) throw new InvalidArgumentException("In ComplexNumber::atanh(), the argument \"z\" passed in must be one of: an integer, a float, a complex number");
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
+    // Special Case - where z = 1 + 0i, artanh(z) evaluates to positive infinity.  Throw an ArithmeticError in this case
+    if ($z->x == 1 && $z->y == 0) throw new ArithmeticError("artanh(1) evaluates to \"positive infinity\"!");
+    // Special Case - where z = -1 + 0i, artanh(z) evaluates to negative infinity.  THrow an ArithmeticError in this case
+    if ($z->x == -1 && $z->y == 0) throw new ArithmeticError("artanh(-1) evaluates to \"negative infinity\"!");
+    // Otherwise, use the logarithmic form as provided by WolframAlpha and return the result
+    return (new ComplexNumber(-1))->times(ComplexNumber::log((new ComplexNumber(1))->minus($z)))->plus(ComplexNumber::log((new ComplexNumber(1))->plus($z)))->dividedBy(2);
+  }
+  public static function artanh($z) {
+    // Alias of ComplexNumber::atanh()
+    return ComplexNumber::atanh($z);
   }
 }
 
