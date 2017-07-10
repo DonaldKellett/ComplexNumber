@@ -238,7 +238,7 @@ class ComplexNumber {
     // If "z" is not an instance of ComplexNumber, convert it into one
     if (!is_a($z, "ComplexNumber")) $z = new ComplexNumber($z);
     // Use the logarithmic form of arsinh(z) and return the result
-    return ComplexNumber::log($z->plus(ComplexNumber::sqrt((new ComplexNumber(1))->plus(ComplexNumber::pow($z, 2)))));
+    return ComplexNumber::log($z->plus(ComplexNumber::sqrt((new ComplexNumber(1))->plus($z->times($z)))));
   }
   public static function arsinh($z) {
     // Alias of ComplexNumber::asinh()
