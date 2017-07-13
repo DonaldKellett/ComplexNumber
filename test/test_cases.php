@@ -1273,6 +1273,75 @@ $test->describe("The ComplexNumber class", function () use ($test) {
       ComplexNumber::cos(array(3, 5));
     });
   });
+  $test->it('should have a working static class method ComplexNumber::tan()', function () use ($test) {
+    // Common values test
+    $minus_sqrt3 = ComplexNumber::tan(-M_PI / 3);
+    $minus_sqrt_third = ComplexNumber::tan(-M_PI / 6);
+    $sqrt_third = ComplexNumber::tan(M_PI / 6);
+    $one = ComplexNumber::tan(M_PI / 4);
+    $sqrt3 = ComplexNumber::tan(M_PI / 3);
+    $test->expect(is_a($minus_sqrt3, 'ComplexNumber'));
+    $test->expect(is_a($minus_sqrt_third, 'ComplexNumber'));
+    $test->expect(is_a($sqrt_third, 'ComplexNumber'));
+    $test->expect(is_a($one, 'ComplexNumber'));
+    $test->expect(is_a($sqrt3, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($minus_sqrt3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($minus_sqrt_third), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_third), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($minus_sqrt3), -sqrt(3));
+    $test->assert_fuzzy_equals(ComplexNumber::Re($minus_sqrt_third), -sqrt(3) / 3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_third), sqrt(3) / 3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt3), sqrt(3));
+    // Asymptotic (Periodic) Tests
+    $test->expect_error('tan(z) is undefined for z = pi / 2', function () use ($test) {
+      ComplexNumber::tan(M_PI / 2);
+    });
+    $test->expect_error('tan(z) is undefined for z = -pi / 2', function () use ($test) {
+      ComplexNumber::tan(-M_PI / 2);
+    });
+    $test->expect_error('tan(z) is undefined for z = -3 * pi / 2', function () use ($test) {
+      ComplexNumber::tan(-3 * M_PI / 2);
+    });
+    // Complex number tests
+    $z = new ComplexNumber(3 * M_PI / 2, log(10));
+    $w1 = ComplexNumber::tan($z);
+    $w2 = ComplexNumber::tan($w1);
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), log(10));
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 3 * M_PI / 2);
+    // Immutability and Computational test on "w1"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), 101 / 99);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), 0);
+    // Computational test on "w2"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), 0.769948807055071);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), 0);
+    // Gotcha test - tan(pi) = 0 (and a zero test)
+    $zero = ComplexNumber::tan(M_PI);
+    $double_zero = ComplexNumber::tan(0);
+    $test->expect(is_a($zero, 'ComplexNumber'));
+    $test->expect(is_a($double_zero, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($double_zero), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($double_zero), 0);
+  });
+  $test->it('ComplexNumber::tan() should type check its arguments', function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::tan("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::tan("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::tan(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::tan(array(3, 5));
+    });
+  });
 });
 
 ?>

@@ -568,3 +568,16 @@ A **static class method** that accepts exactly 1 argument `z`, a real or complex
 $z = new ComplexNumber(-4, 3); // -4 + 3i
 ComplexNumber::cos($z); // => cos(-4 + 3i)
 ```
+
+#### tan(z)
+
+```php
+ComplexNumber ComplexNumber::tan(mixed $z)
+```
+
+A **static class method** that accepts exactly 1 argument `z`, a real or complex number, and returns the value of `tan(z)`.  E.g.
+
+```php
+$z = new ComplexNumber(3, 7); // 3 + 7i
+ComplexNumber::tan($z); // => tan(3 + 7i)
+```

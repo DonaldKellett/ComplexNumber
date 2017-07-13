@@ -288,6 +288,16 @@ class ComplexNumber {
     // Use a suitable identity and return the result
     return ComplexNumber::cosh((new ComplexNumber(0, 1))->times($z));
   }
+  public static function tan($z) {
+    // Type check "z" - confirm it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, 'ComplexNumber')) throw new InvalidArgumentException('In ComplexNumber::tan(), the argument "z" passed in must be one of: an integer, a float, a complex number');
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, 'ComplexNumber')) $z = new ComplexNumber($z);
+    // Special case: where z = (pi * n - pi / 2) + 0i (where n is an integer), tan(z) is undefined!  Throw an ArithmeticError in this case
+    if (fmod($z->x + M_PI / 2, M_PI) == 0.0 && $z->y == 0) throw new ArithmeticError('When z = pi * n - pi / 2, tan(z) is undefined!');
+    // Otherwise, use the trig identity tan(z) = sin(z) / cos(z) and return the result
+    return ComplexNumber::sin($z)->dividedBy(ComplexNumber::cos($z));
+  }
 }
 
 ?>
