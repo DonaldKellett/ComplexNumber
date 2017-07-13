@@ -538,3 +538,20 @@ ComplexNumber ComplexNumber::artanh(mixed $z)
 ```
 
 Alias of `ComplexNumber::atanh()`
+
+### Trigonometric / Inverse Trigonometric Functions
+
+The trigonometric / inverse trigonometric functions have been implemented as of `v1.2.0`.
+
+#### sin(z)
+
+```php
+ComplexNumber ComplexNumber::sin(mixed $z)
+```
+
+A **static class method** that accepts exactly 1 argument `z`, a real or complex number, and returns the result of `sin(z)`.  E.g.
+
+```php
+$z = new ComplexNumber(2, -3); // 2 - 3i
+ComplexNumber::sin($z); // => sin(2 - 3i)
+```

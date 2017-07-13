@@ -272,6 +272,14 @@ class ComplexNumber {
     // Alias of ComplexNumber::atanh()
     return ComplexNumber::atanh($z);
   }
+  public static function sin($z) {
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, 'ComplexNumber')) throw new InvalidArgumentException('In ComplexNumber::sin(), the argument "z" passed in must be one of: an integer, a float, a complex number');
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, 'ComplexNumber')) $z = new ComplexNumber($z);
+    // Use a suitable identity and return the result
+    return (new ComplexNumber(0, -1))->times(ComplexNumber::sinh((new ComplexNumber(0, 1))->times($z)));
+  }
 }
 
 ?>

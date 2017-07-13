@@ -1121,6 +1121,82 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_fuzzy_equals(ComplexNumber::Im($z), 1.409921049596576);
     $test->assert_fuzzy_equals(ComplexNumber::Re($z), 0.229072682968539);
   });
+  $test->it('should have a working static class method ComplexNumber::sin()', function () use ($test) {
+    // Common values test
+    $half = ComplexNumber::sin(M_PI / 6);
+    $sqrt_half = ComplexNumber::sin(M_PI / 4);
+    $root_three_over_two = ComplexNumber::sin(M_PI / 3);
+    $one = ComplexNumber::sin(M_PI / 2);
+    $minus_one = ComplexNumber::sin(3 * M_PI / 2);
+    $test->expect(is_a($half, 'ComplexNumber'));
+    $test->expect(is_a($sqrt_half, 'ComplexNumber'));
+    $test->expect(is_a($root_three_over_two, 'ComplexNumber'));
+    $test->expect(is_a($one, 'ComplexNumber'));
+    $test->expect(is_a($minus_one, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($half), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_half), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($root_three_over_two), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($minus_one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($half), 0.5);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_half), sqrt(2) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($root_three_over_two), sqrt(3) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($minus_one), -1);
+    // Periodicity Test
+    $x1 = ComplexNumber::sin(-M_PI / 3);
+    $x2 = ComplexNumber::sin(5 * M_PI / 3);
+    $x3 = ComplexNumber::sin(-7 * M_PI / 3);
+    $test->expect(is_a($x1, 'ComplexNumber'));
+    $test->expect(is_a($x2, 'ComplexNumber'));
+    $test->expect(is_a($x3, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($x1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($x2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($x3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($x1), -sqrt(3) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($x2), -sqrt(3) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($x3), -sqrt(3) / 2);
+    // Complex number tests
+    $z = new ComplexNumber(-5.74, 3.26);
+    $w1 = ComplexNumber::sin($z);
+    $w2 = ComplexNumber::sin($w1);
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 3.26);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), -5.74);
+    // Computational and Immutability test on "w1"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), 11.133638508072807);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), 6.741973613958061);
+    // Computational test on "w2"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), 30679.024792306656595);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), 15153.614290294440705);
+    // Zero tests
+    $zero1 = ComplexNumber::sin(0);
+    $zero2 = ComplexNumber::sin(0.0);
+    $zero3 = ComplexNumber::sin(new ComplexNumber(0));
+    $test->expect(is_a($zero1, 'ComplexNumber'));
+    $test->expect(is_a($zero2, 'ComplexNumber'));
+    $test->expect(is_a($zero3, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero3), 0);
+  });
+  $test->it('ComplexNumber::sin() should type check its arguments', function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::sin("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::sin("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::sin(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::sin(array(3, 5));
+    });
+  });
 });
 
 ?>
