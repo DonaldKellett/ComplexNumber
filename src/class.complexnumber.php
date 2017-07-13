@@ -310,6 +310,20 @@ class ComplexNumber {
     // Alias of ComplexNumber::asin()
     return ComplexNumber::asin($z);
   }
+  public static function acos($z) {
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, 'ComplexNumber')) throw new InvalidArgumentException('In ComplexNumber::acos(), the argument "z" passed in must be one of: an integer, a float, a complex number');
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, 'ComplexNumber')) $z = new ComplexNumber($z);
+    // Special Case - where z = 1 + 0i, arccos(1) evaluates to 0
+    if ($z->x == 1 && $z->y == 0) return new ComplexNumber(0);
+    // Otherwise use a suitable identity and return the result
+    return ComplexNumber::acosh($z)->times(ComplexNumber::sqrt((new ComplexNumber(1))->minus($z)))->dividedBy(ComplexNumber::sqrt($z->minus(1)));
+  }
+  public static function arccos($z) {
+    // Alias of ComplexNumber::acos()
+    return ComplexNumber::acos($z);
+  }
 }
 
 ?>

@@ -602,3 +602,24 @@ ComplexNumber ComplexNumber::arcsin(mixed $z)
 ```
 
 Alias of `ComplexNumber::asin()`
+
+#### acos
+
+```php
+ComplexNumber ComplexNumber::acos(mixed $z)
+```
+
+A **static class method** that receives 1 argument `z` (a real/complex number) and returns the arc-cosine of `z`.  E.g.
+
+```php
+$z = new ComplexNumber(-2, -1); // -2 - i
+ComplexNumber::acos($z); // => arccos(-2 - i)
+```
+
+#### arccos(z)
+
+```php
+ComplexNumber ComplexNumber::arccos(mixed $z)
+```
+
+Alias of `ComplexNumber::acos()`

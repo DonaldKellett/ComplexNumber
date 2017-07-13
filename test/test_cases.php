@@ -1410,6 +1410,74 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_fuzzy_equals(ComplexNumber::Im($z), 1.061275061905036);
     $test->assert_fuzzy_equals(ComplexNumber::Re($z), 0.666239432492515);
   });
+  $test->it('should have a working static class method ComplexNumber::acos()', function () use ($test) {
+    // Real number tests
+    $a = ComplexNumber::acos(-sqrt(3) / 2);
+    $b = ComplexNumber::acos(1 / 2);
+    $c = ComplexNumber::acos(1);
+    $d = ComplexNumber::acos(2.5);
+    $e = ComplexNumber::acos(-5);
+    $test->expect(is_a($a, 'ComplexNumber'));
+    $test->expect(is_a($b, 'ComplexNumber'));
+    $test->expect(is_a($c, 'ComplexNumber'));
+    $test->expect(is_a($d, 'ComplexNumber'));
+    $test->expect(is_a($e, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($a), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($a), 5 * M_PI / 6);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($b), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($b), M_PI / 3);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($c), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($c), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($d), 1.566799236972411);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($d), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($e), -2.292431669561178);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($e), M_PI);
+    // Complex number tests
+    $z = new ComplexNumber(6, -7);
+    $w1 = ComplexNumber::acos($z);
+    $w2 = ComplexNumber::acos($w1);
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), -7);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 6);
+    // Computational and Immutability test on "w1"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), 2.914934966310305);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), 0.865072631106608);
+    // Computational test on "w2"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), -1.827410890063858);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), 1.296112841790616);
+    // Zero tests
+    $m = ComplexNumber::acos(0);
+    $n = ComplexNumber::acos(0.0);
+    $p = ComplexNumber::acos(new ComplexNumber(0.0, 0.0));
+    $test->expect(is_a($m, 'ComplexNumber'));
+    $test->expect(is_a($n, 'ComplexNumber'));
+    $test->expect(is_a($p, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($m), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($n), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($p), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($m), M_PI / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($n), M_PI / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($p), M_PI / 2);
+  });
+  $test->it('ComplexNumber::acos() should type check its arguments', function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::acos("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::acos("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::acos(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::acos(array(3, 5));
+    });
+  });
+  $test->it('ComplexNumber::acos() should have an alias ComplexNumber::arccos()', function () use ($test) {
+    $z = ComplexNumber::arccos(new ComplexNumber(-1, 1));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), -1.061275061905036);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 2.237035759287412);
+  });
 });
 
 ?>
