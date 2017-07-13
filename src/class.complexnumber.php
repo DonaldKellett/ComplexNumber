@@ -3,7 +3,7 @@
 /*
   ComplexNumber
   A simple and comprehensive complex number class for PHP
-  v1.1.0
+  v1.2.0
   (c) Donald Leung
   MIT License
 */
@@ -323,6 +323,22 @@ class ComplexNumber {
   public static function arccos($z) {
     // Alias of ComplexNumber::acos()
     return ComplexNumber::acos($z);
+  }
+  public static function atan($z) {
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, 'ComplexNumber')) throw new InvalidArgumentException('In ComplexNumber::atan(), the argument "z" passed in must be one of: an integer, a float, a complex number');
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, 'ComplexNumber')) $z = new ComplexNumber($z);
+    // Special Case: arctan(i) = i * Infinity (throw ArithmeticError)
+    if ($z->x == 0 && $z->y == 1) throw new ArithmeticError('arctan(i) = i * Infinity');
+    // Special Case: arctan(-i) = -i * Infinity (throw ArithmeticError)
+    if ($z->x == 0 && $z->y == -1) throw new ArithmeticError('arctan(-i) = -i * Infinity');
+    // Otherwise, use a suitable identity and return the result
+    return (new ComplexNumber(0, -1))->times(ComplexNumber::atanh($z->times(new ComplexNumber(0, 1))));
+  }
+  public static function arctan($z) {
+    // Alias of ComplexNumber::atan()
+    return ComplexNumber::atan($z);
   }
 }
 

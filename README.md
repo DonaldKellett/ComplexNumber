@@ -6,7 +6,7 @@ A simple yet comprehensive complex number class in PHP.  MIT Licensed
 
 ## Overview
 
-- Version: `v1.1.0` Stable
+- Version: `v1.2.0` Stable
 - Owner: [DonaldKellett](https://github.com/DonaldKellett)
 - License: MIT License
 
@@ -623,3 +623,24 @@ ComplexNumber ComplexNumber::arccos(mixed $z)
 ```
 
 Alias of `ComplexNumber::acos()`
+
+#### atan
+
+```php
+ComplexNumber ComplexNumber::atan(mixed $z)
+```
+
+A **static class method** that accepts exactly 1 argument `z` (a real/complex number) and returns the arctangent of `z`.  E.g.
+
+```php
+$z = new ComplexNumber(3, 4); // 3 + 4i
+ComplexNumber::atan($z); // => arctan(3 + 4i)
+```
+
+#### arctan(z)
+
+```php
+ComplexNumber ComplexNumber::arctan(mixed $z)
+```
+
+Alias of `ComplexNumber::atan()`
