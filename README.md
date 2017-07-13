@@ -581,3 +581,24 @@ A **static class method** that accepts exactly 1 argument `z`, a real or complex
 $z = new ComplexNumber(3, 7); // 3 + 7i
 ComplexNumber::tan($z); // => tan(3 + 7i)
 ```
+
+#### asin
+
+```php
+ComplexNumber ComplexNumber::asin(mixed $z)
+```
+
+A **static class method** that receives exactly 1 argument `z` (a real/complex number) and evaluates the arcsine of `z`.  E.g.
+
+```php
+$z = new ComplexNumber(1, -2); // 1 - 2i
+ComplexNumber::asin($z); // => arcsin(1 - 2i)
+```
+
+#### arcsin(z)
+
+```php
+ComplexNumber ComplexNumber::arcsin(mixed $z)
+```
+
+Alias of `ComplexNumber::asin()`

@@ -298,6 +298,18 @@ class ComplexNumber {
     // Otherwise, use the trig identity tan(z) = sin(z) / cos(z) and return the result
     return ComplexNumber::sin($z)->dividedBy(ComplexNumber::cos($z));
   }
+  public static function asin($z) {
+    // Type check "z" - confirm that it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, 'ComplexNumber')) throw new InvalidArgumentException('In ComplexNumber::asin(), the argument "z" passed in must be one of: an integer, a float, a complex number');
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, 'ComplexNumber')) $z = new ComplexNumber($z);
+    // Use a suitable identity and return the result
+    return (new ComplexNumber(0, -1))->times(ComplexNumber::asinh($z->times(new ComplexNumber(0, 1))));
+  }
+  public static function arcsin($z) {
+    // Alias of ComplexNumber::asin()
+    return ComplexNumber::asin($z);
+  }
 }
 
 ?>
