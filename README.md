@@ -555,3 +555,16 @@ A **static class method** that accepts exactly 1 argument `z`, a real or complex
 $z = new ComplexNumber(2, -3); // 2 - 3i
 ComplexNumber::sin($z); // => sin(2 - 3i)
 ```
+
+#### cos(z)
+
+```php
+ComplexNumber ComplexNumber::cos(mixed $z)
+```
+
+A **static class method** that accepts exactly 1 argument `z`, a real or complex number, and returns the result of `cos(z)`.  E.g.
+
+```php
+$z = new ComplexNumber(-4, 3); // -4 + 3i
+ComplexNumber::cos($z); // => cos(-4 + 3i)
+```

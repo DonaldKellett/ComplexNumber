@@ -1197,6 +1197,82 @@ $test->describe("The ComplexNumber class", function () use ($test) {
       ComplexNumber::sin(array(3, 5));
     });
   });
+  $test->it('should have a working static class method ComplexNumber::cos()', function () use ($test) {
+    // Common values test
+    $root_three_over_two = ComplexNumber::cos(M_PI / 6);
+    $sqrt_half = ComplexNumber::cos(M_PI / 4);
+    $half = ComplexNumber::cos(M_PI / 3);
+    $zero = ComplexNumber::cos(M_PI / 2);
+    $minus_one = ComplexNumber::cos(M_PI);
+    $test->expect(is_a($root_three_over_two, 'ComplexNumber'));
+    $test->expect(is_a($sqrt_half, 'ComplexNumber'));
+    $test->expect(is_a($half, 'ComplexNumber'));
+    $test->expect(is_a($zero, 'ComplexNumber'));
+    $test->expect(is_a($minus_one, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($root_three_over_two), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($sqrt_half), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($half), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($zero), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($minus_one), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($root_three_over_two), sqrt(3) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($sqrt_half), sqrt(2) / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($half), 1 / 2);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($zero), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($minus_one), -1);
+    // Periodicity Tests
+    $cos_pi_over_12 = ComplexNumber::cos(M_PI / 12);
+    $x1 = ComplexNumber::cos(49 * M_PI / 12);
+    $x2 = ComplexNumber::cos(-71 * M_PI / 12);
+    $test->expect(is_a($cos_pi_over_12, 'ComplexNumber'));
+    $test->expect(is_a($x1, 'ComplexNumber'));
+    $test->expect(is_a($x2, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($cos_pi_over_12), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($x1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($x2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($cos_pi_over_12), (sqrt(6) + sqrt(2)) / 4);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($x1), (sqrt(6) + sqrt(2)) / 4);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($x2), (sqrt(6) + sqrt(2)) / 4);
+    // Complex number tests
+    $z = new ComplexNumber(5, -3);
+    $w1 = ComplexNumber::cos($z);
+    $w2 = ComplexNumber::cos($w1);
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), -3);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 5);
+    // Immutability and Computational test on "w1"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), -9.606383448432581);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), 2.855815004227387);
+    // Computational test on "w2"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), 2094.450104105243305);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), -7128.339591676090913);
+    // Zero tests
+    $one1 = ComplexNumber::cos(0);
+    $one2 = ComplexNumber::cos(0.0);
+    $one3 = ComplexNumber::cos(new ComplexNumber(0, 0.0));
+    $test->expect(is_a($one1, 'ComplexNumber'));
+    $test->expect(is_a($one2, 'ComplexNumber'));
+    $test->expect(is_a($one3, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one1), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one2), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one3), 1);
+  });
+  $test->it('ComplexNumber::cos() should type check its arguments', function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::cos("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::cos("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::cos(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::cos(array(3, 5));
+    });
+  });
 });
 
 ?>
