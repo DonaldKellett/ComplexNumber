@@ -6,7 +6,7 @@ A simple yet comprehensive complex number class in PHP.  MIT Licensed
 
 ## Overview
 
-- Version: `v1.2.0` Stable
+- Version: `v1.2.1` Stable
 - Owner: [DonaldKellett](https://github.com/DonaldKellett)
 - License: MIT License
 
@@ -82,7 +82,7 @@ echo ComplexNumber::Re($exp_z) . "\r\n"; // prints a value equal to e^3 * cos(4)
 
 ## PHP Version
 
-The entire project has been tested and confirmed to work properly in all versions of PHP 7.  Furthermore, the `ComplexNumber` class should also work in PHP 5.6.x+ but this has yet to be officially confirmed.  The PHPTester testing framework (version 3.1.0) requires PHP 7 or later but that is irrelevant to this project (except for viewing the passing assertions).
+The entire project has been tested and confirmed to work properly in all versions of PHP 7.  Furthermore, the `ComplexNumber` class should also work in PHP 5.1.0+ but this has yet to be officially confirmed.  The PHPTester testing framework (version 3.1.0) requires PHP 7 or later but that is irrelevant to this project (except for viewing the passing assertions).
 
 ## Contributing
 
@@ -352,7 +352,7 @@ An alias of `ComplexNumber::multiply()`
 ```php
 ComplexNumber ComplexNumber::divide(mixed $z)
 ```
-An instance method that receives exactly 1 argument `$z` (a nonzero integer / float / complex number) and returns a new complex number equivalent to the current instance divided by `$z`.  If the provided argument is zero (`0` / `0.0` / `0 + 0i`), throws a `DivisionByZeroError`.  For other invalid input (e.g. string, boolean, array), throws an `InvalidArgumentException`.  E.g.
+An instance method that receives exactly 1 argument `$z` (a nonzero integer / float / complex number) and returns a new complex number equivalent to the current instance divided by `$z`.  If the provided argument is zero (`0` / `0.0` / `0 + 0i`), throws an `InvalidArgumentException`.  For other invalid input (e.g. string, boolean, array), throws an `InvalidArgumentException`.  E.g.
 
 ```php
 $z = new ComplexNumber(10, 5); // 10 + 5i
@@ -427,7 +427,7 @@ ComplexNumber::log($z, $b); // => Logarithm of (24 + 7i) to base (-3 - 4i)
 ComplexNumber ComplexNumber::pow(mixed $z, mixed $w)
 ```
 
-A **static class method** that given two real/complex numbers `$z` and `$w`, evaluates <em>z<sup>w</sup></em> and returns the result as a new instance of `ComplexNumber` even if both arguments passed in are real numbers.  When `z = 0 (= 0 + 0i)`, <em>z<sup>w</sup></em> is considered to be `0 + 0i` as well as long as `Re(w) > 0`.  When `Re(w) = 0`, <em>z<sup>w</sup></em> is considered to be `1 + 0i` regardless of the imaginary part of `w` (where `z = 0 + 0i`).  Otherwise, when `z = 0` and `Re(w) < 0`, an `ArithmeticError` is thrown.  E.g.
+A **static class method** that given two real/complex numbers `$z` and `$w`, evaluates <em>z<sup>w</sup></em> and returns the result as a new instance of `ComplexNumber` even if both arguments passed in are real numbers.  When `z = 0 (= 0 + 0i)`, <em>z<sup>w</sup></em> is considered to be `0 + 0i` as well as long as `Re(w) > 0`.  When `Re(w) = 0`, <em>z<sup>w</sup></em> is considered to be `1 + 0i` regardless of the imaginary part of `w` (where `z = 0 + 0i`).  Otherwise, when `z = 0` and `Re(w) < 0`, an `InvalidArgumentException` is thrown.  E.g.
 
 ```php
 ComplexNumber::pow(new ComplexNumber(3, 4), new ComplexNumber(-7, 24)); // => (3 + 4i) ^ (-7 + 24i)
@@ -469,7 +469,7 @@ ComplexNumber::cosh($z); // => cosh(7 + 24i)
 ComplexNumber ComplexNumber::tanh(mixed $z)
 ```
 
-A **static class method** that receives exactly 1 argument `z`, a real or complex number, and returns the value of `tanh(z)`.  In the special case where `z` satisfies `z = i * pi * n - i * pi / 2` (where `n` is any integer), an `ArithmeticError` is thrown.  E.g.
+A **static class method** that receives exactly 1 argument `z`, a real or complex number, and returns the value of `tanh(z)`.  In the special case where `z` satisfies `z = i * pi * n - i * pi / 2` (where `n` is any integer), an `InvalidArgumentException` is thrown.  E.g.
 
 ```php
 $z = new ComplexNumber(3, 2); // 3 + 2i
@@ -524,7 +524,7 @@ Alias of `ComplexNumber::acosh()`
 ComplexNumber ComplexNumber::atanh(mixed $z)
 ```
 
-A **static class method** that receives exactly 1 argument `z` (a real or complex number) and returns the result of `artanh(z)`.  In the case where `z = +-1`, an `ArithmeticError` is thrown.  E.g.
+A **static class method** that receives exactly 1 argument `z` (a real or complex number) and returns the result of `artanh(z)`.  In the case where `z = +-1`, an `InvalidArgumentException` is thrown.  E.g.
 
 ```php
 $z = new ComplexNumber(11, 23); // 11 + 23i
