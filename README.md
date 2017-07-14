@@ -6,7 +6,7 @@ A simple yet comprehensive complex number class in PHP.  MIT Licensed
 
 ## Overview
 
-- Version: `v1.2.1` Stable
+- Version: `v1.2.2` Stable
 - Owner: [DonaldKellett](https://github.com/DonaldKellett)
 - License: MIT License
 
@@ -112,6 +112,8 @@ On top of all that, there is a particular type of pull request that will **alway
 ```php
 ComplexNumber::RECTANGULAR_FORM === 0;
 ComplexNumber::MODULUS_ARGUMENT_FORM === 1;
+ComplexNumber::SINC_DEFAULT === 2;
+ComplexNumber::SINC_NORMALIZED === 3;
 ```
 
 Each class constant is assigned a numerical value but it is **not recommended** to use them for purposes other than those mentioned in the documentation below to avoid any possible confusion.
@@ -644,3 +646,23 @@ ComplexNumber ComplexNumber::arctan(mixed $z)
 ```
 
 Alias of `ComplexNumber::atan()`
+
+### Miscellaneous
+
+The first miscellaneous complex mathematical function/operation has been implemented since `v1.2.2` but some miscellaneous functions may have been implemented later than others - please refer to each miscellaneous function individually for the first (sub)version in which they have been implemented.
+
+#### sinc(z)
+
+*Implemented since* `v1.2.2`
+
+```php
+ComplexNumber ComplexNumber::sinc(mixed $z, int $flag = ComplexNumber::SINC_DEFAULT)
+```
+
+A **static class method** that receives up to two arguments, the first argument being `$z` (a real/complex number) and the second argument being `$flag` (an integer) which defaults to `ComplexNumber::SINC_DEFAULT === 2`.  If the second argument is not provided or set to `ComplexNumber::SINC_DEFAULT`, this function evaluates and returns the historical (unnormalized) [cardinal sine](https://en.wikipedia.org/wiki/Sinc_function) of `z`; otherwise, if the second argument `$flag` is set to `ComplexNumber::SINC_NORMALIZED === 3`, it evaluates and returns the **normalized** cardinal sine of `z` instead.  If any other `$flag` is provided then it is treated as an invalid argument and an `InvalidArgumentException` is thrown.  E.g.
+
+```php
+$z = new ComplexNumber(3, 4); // 3 + 4i
+ComplexNumber::sinc($z); // => sinc(3 + 4i) [unnormalized]
+ComplexNumber::sinc($z, ComplexNumber::SINC_NORMALIZED); // => sinc(3 + 4i) [normalized]
+```

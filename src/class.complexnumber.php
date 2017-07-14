@@ -3,7 +3,7 @@
 /*
   ComplexNumber
   A simple yet comprehensive complex number class for PHP
-  v1.2.1
+  v1.2.2
   (c) Donald Leung
   MIT License
 */
@@ -13,6 +13,8 @@ class ComplexNumber {
   // Class Constants - used internally
   const RECTANGULAR_FORM = 0;
   const MODULUS_ARGUMENT_FORM = 1;
+  const SINC_DEFAULT = 2;
+  const SINC_NORMALIZED = 3;
   public function __construct($x, $y = 0, $form = ComplexNumber::RECTANGULAR_FORM) {
     // Type check "x" and "y" - both must be numbers
     if (!(is_numeric($x) && !is_string($x))) throw new InvalidArgumentException("The real part of the complex number \"x\" must be an integer or a float!");
@@ -339,6 +341,20 @@ class ComplexNumber {
   public static function arctan($z) {
     // Alias of ComplexNumber::atan()
     return ComplexNumber::atan($z);
+  }
+  public static function sinc($z, $flag = ComplexNumber::SINC_DEFAULT) {
+    // Type check "z" - confirm it is one of: an integer, a float, a complex number
+    if (!is_int($z) && !is_float($z) && !is_a($z, 'ComplexNumber')) throw new InvalidArgumentException('In ComplexNumber::sinc(), the first argument "z" passed in must be one of: an integer, a float, a complex number');
+    // Confirm that "flag" is set to one of two possible values: ComplexNumber::SINC_DEFAULT and ComplexNumber::SINC_NORMALIZED
+    if ($flag !== ComplexNumber::SINC_DEFAULT && $flag !== ComplexNumber::SINC_NORMALIZED) throw new InvalidArgumentException('In ComplexNumber::sinc(), the second argument "flag" passed in must only be set to either ComplexNumber::SINC_DEFAULT or ComplexNumber::SINC_NORMALIZED');
+    // If "z" is not an instance of ComplexNumber, convert it into one
+    if (!is_a($z, 'ComplexNumber')) $z = new ComplexNumber($z);
+    // Special Case: sinc(0 + 0i) = 1 + 0i regardless of whether sinc(z) is normalized
+    if ($z->x == 0 && $z->y == 0) return new ComplexNumber(1);
+    // If ComplexNumber::SINC_NORMALIZED flag is set, multiply argument "z" by pi and compute unnormalized cardinal sine
+    if ($flag === ComplexNumber::SINC_NORMALIZED) return ComplexNumber::sinc($z->times(M_PI));
+    // Otherwise, use definition of historical (unnormalized) cardinal sine and return the result
+    return ComplexNumber::sin($z)->dividedBy($z);
   }
 }
 

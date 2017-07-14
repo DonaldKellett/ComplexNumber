@@ -1541,6 +1541,145 @@ $test->describe("The ComplexNumber class", function () use ($test) {
     $test->assert_fuzzy_equals(ComplexNumber::Im($z), -0.402359478108525);
     $test->assert_fuzzy_equals(ComplexNumber::Re($z), -1.017221967897851);
   });
+  $test->it('should have a working static class method ComplexNumber::sinc()', function () use ($test) {
+    // Real number tests
+    $a = ComplexNumber::sinc(1);
+    $b = ComplexNumber::sinc(-2.25);
+    $c = ComplexNumber::sinc(3.87);
+    $d = ComplexNumber::sinc(-5);
+    $e = ComplexNumber::sinc(10.0);
+    $test->expect(is_a($a, 'ComplexNumber'));
+    $test->expect(is_a($b, 'ComplexNumber'));
+    $test->expect(is_a($c, 'ComplexNumber'));
+    $test->expect(is_a($d, 'ComplexNumber'));
+    $test->expect(is_a($e, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($a), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($b), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($c), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($d), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($e), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($a), 0.841470984807897);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($b), 0.345810309727965);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($c), -0.172010848849126);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($d), -0.191784854932628);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($e), -0.054402111088937);
+    // Complex number tests
+    $z = new ComplexNumber(1, 6);
+    $w1 = ComplexNumber::sinc($z);
+    $w2 = ComplexNumber::sinc(new ComplexNumber(-4.1, 4.9));
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 6);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 1);
+    // Computational tests on "w1" and "w2"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), -24.579487724961643);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), 22.260928629344409);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), -2.719240866238583);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), -10.151681200659712);
+    // Zero tests - sinc(0) = 1
+    $one1 = ComplexNumber::sinc(0);
+    $one2 = ComplexNumber::sinc(0.0);
+    $one3 = ComplexNumber::sinc(new ComplexNumber(0, 0.0));
+    $test->expect(is_a($one1, 'ComplexNumber'));
+    $test->expect(is_a($one2, 'ComplexNumber'));
+    $test->expect(is_a($one3, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one1), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one2), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one3), 1);
+  });
+  $test->it('ComplexNumber::sinc() should compute the normalized cardinal sine when the ComplexNumber::SINC_NORMALIZED flag is on', function () use ($test) {
+    // Real number tests
+    $a = ComplexNumber::sinc(0.67, ComplexNumber::SINC_NORMALIZED);
+    $b = ComplexNumber::sinc(-1, ComplexNumber::SINC_NORMALIZED);
+    $c = ComplexNumber::sinc(2.5, ComplexNumber::SINC_NORMALIZED);
+    $test->expect(is_a($a, 'ComplexNumber'));
+    $test->expect(is_a($b, 'ComplexNumber'));
+    $test->expect(is_a($c, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($a), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($b), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($c), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($a), 0.408929397983926);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($b), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($c), 0.127323954473516);
+    // Complex number tests
+    $z = new ComplexNumber(3, 4);
+    $w1 = ComplexNumber::sinc($z, ComplexNumber::SINC_NORMALIZED);
+    $w2 = ComplexNumber::sinc(new ComplexNumber(-6, 1), ComplexNumber::SINC_NORMALIZED);
+    // Immutability test on "z"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($z), 4);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($z), 3);
+    // Computational tests on "w1" and "w2"
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w1), -5476.546670788234507);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w1), -7302.062227717646010);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($w2), -0.596120742222969);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($w2), 0.099353457037162);
+    // Zero tests
+    $one1 = ComplexNumber::sinc(0, ComplexNumber::SINC_NORMALIZED);
+    $one2 = ComplexNumber::sinc(0.0, ComplexNumber::SINC_NORMALIZED);
+    $one3 = ComplexNumber::sinc(new ComplexNumber(0, 0.0), ComplexNumber::SINC_NORMALIZED);
+    $test->expect(is_a($one1, 'ComplexNumber'));
+    $test->expect(is_a($one2, 'ComplexNumber'));
+    $test->expect(is_a($one3, 'ComplexNumber'));
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one1), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one2), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Im($one3), 0);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one1), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one2), 1);
+    $test->assert_fuzzy_equals(ComplexNumber::Re($one3), 1);
+  });
+  $test->it('ComplexNumber::sinc() should type check its first argument "z"', function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::sinc("11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::sinc("Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::sinc(true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::sinc(array(3, 5));
+    });
+  });
+  $test->it('ComplexNumber::sinc() should type check its second argument "flag"', function () use ($test) {
+    $test->expect_error("A numeric string should not be accepted", function () {
+      ComplexNumber::sinc(0, "11.23");
+    });
+    $test->expect_error("A string is invalid input", function () {
+      ComplexNumber::sinc(1.0, "Hello World");
+    });
+    $test->expect_error("A boolean should be rejected", function () {
+      ComplexNumber::sinc(2, true);
+    });
+    $test->expect_error("An array should be rejected", function () {
+      ComplexNumber::sinc(-3.3, array(3, 5));
+    });
+  });
+  $test->it('ComplexNumber::sinc() should not accept any flags other than ComplexNumber::SINC_DEFAULT and ComplexNumber::SINC_NORMALIZED', function () use ($test) {
+    $test->expect_no_error('Flag ComplexNumber::SINC_DEFAULT should be accepted', function () {
+      ComplexNumber::sinc(23, ComplexNumber::SINC_DEFAULT);
+    });
+    $test->expect_no_error('Integer flag "2" should be accepted (= ComplexNumber::SINC_DEFAULT)', function () {
+      ComplexNumber::sinc(new ComplexNumber(1, -1), 2);
+    });
+    $test->expect_no_error('Integer flag "3" should be accepted (= ComplexNumber::SINC_NORMALIZED)', function () {
+      ComplexNumber::sinc(new ComplexNumber(6, 4), 3);
+    });
+    $test->expect_error('Float "2.0" should be rejected', function () {
+      ComplexNumber::sinc(new ComplexNumber(2, 2), 2.0);
+    });
+    $test->expect_error('Float "3.0" should be rejected', function () {
+      ComplexNumber::sinc(new ComplexNumber(2, 2), 3.0);
+    });
+    $test->expect_error('Flag ComplexNumber::RECTANGULAR_FORM should be rejected', function () {
+      ComplexNumber::sinc(new ComplexNumber(3, 2), ComplexNumber::RECTANGULAR_FORM);
+    });
+    $test->expect_error('Flag ComplexNumber::MODULUS_ARGUMENT_FORM should be rejected', function () {
+      ComplexNumber::sinc(new ComplexNumber(3, 2), ComplexNumber::MODULUS_ARGUMENT_FORM);
+    });
+  });
 });
 
 ?>
