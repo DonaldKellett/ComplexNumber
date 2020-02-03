@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/DonaldKellett/ComplexNumber](https://badges.gitter.im/DonaldKellett/ComplexNumber.svg)](https://gitter.im/DonaldKellett/ComplexNumber?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A simple yet comprehensive complex number class in PHP.  MIT Licensed
+A simple yet comprehensive complex number class in PHP
 
 ## Overview
 
@@ -84,9 +84,13 @@ echo ComplexNumber::Re($exp_z) . "\r\n"; // prints a value equal to e^3 * cos(4)
 
 The entire project has been tested and confirmed to work properly in all versions of PHP 7.  Furthermore, the `ComplexNumber` class should also work in PHP 5.1.0+ but this has yet to be officially confirmed.  The PHPTester testing framework (version 3.1.0) requires PHP 7 or later but that is irrelevant to this project (except for viewing the passing assertions).
 
-## Contributing
+## CONTRIBUTING
 
 This project is no longer maintained and therefore will no longer be accepting any contributions.
+
+## LICENSE
+
+[MIT](./LICENSE)
 
 ## Class Synopsis (ComplexNumber)
 
